@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimWork — Job Simulation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070F;--s1:#0F0F1A;--s2:#161622;--s3:#1D1D2E;
+  --accent:#7C6EFA;--accent2:#34D399;--accent3:#F59E0B;--rose:#F87171;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#F0EDF8;--muted:#6B6880;--muted2:#A09DB8;
+  --ff:'Plus Jakarta Sans',sans-serif;--mono:'Fira Code',monospace;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;flex-direction:column}
+
+/* ── TOPBAR ── */
+#topbar{height:52px;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;z-index:50}
+.tb-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;letter-spacing:-.02em}
+.tb-logo-sq{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 4px}
+.tb-breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted2)}
+.tb-breadcrumb span{color:var(--muted)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-score{font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);padding:4px 12px;border-radius:20px}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+
+/* ── MAIN LAYOUT ── */
+#app{flex:1;display:flex;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{width:220px;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-section{padding:12px 10px 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;margin:1px 6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted2);transition:all .15s;position:relative}
+.sb-item:hover{background:var(--s2);color:var(--text)}
+.sb-item.active{background:rgba(124,110,250,.12);color:var(--accent);border:1px solid rgba(124,110,250,.2)}
+.sb-item .icon{font-size:15px;width:20px;text-align:center}
+.sb-badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px}
+.sb-progress{padding:12px 14px;margin-top:auto;border-top:1px solid var(--border)}
+.sb-prog-label{font-size:11px;color:var(--muted);margin-bottom:6px}
+.sb-prog-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
+.sb-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease}
+.sb-prog-stat{font-size:11px;color:var(--muted2);margin-top:6px;font-family:var(--mono)}
+
+/* ── CONTENT AREA ── */
+#content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── PAGES ── */
+.page{display:none;flex:1;overflow-y:auto;padding:28px 32px}
+.page.active{display:flex;flex-direction:column}
+
+/* ── DASHBOARD ── */
+.dash-welcome{margin-bottom:28px}
+.dash-welcome h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.dash-welcome p{font-size:14px;color:var(--muted2)}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.stat-card-num{font-size:28px;font-weight:800;letter-spacing:-.03em;margin-bottom:2px}
+.stat-card-label{font-size:12px;color:var(--muted2)}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dash-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px;overflow:hidden}
+.dash-card-title{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sim-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .15s}
+.sim-row:last-child{border-bottom:none}
+.sim-row:hover{opacity:.85}
+.sim-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sim-info{flex:1}
+.sim-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.sim-meta{font-size:11px;color:var(--muted2)}
+.sim-status{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+.status-active{background:rgba(124,110,250,.15);color:var(--accent)}
+.status-done{background:rgba(52,211,153,.12);color:var(--accent2)}
+.status-locked{background:var(--s2);color:var(--muted)}
+.activity-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.activity-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.act-text{color:var(--muted2);line-height:1.5}
+.act-time{color:var(--muted);font-family:var(--mono);font-size:10px;margin-top:2px}
+.leaderboard-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.leaderboard-row:last-child{border-bottom:none}
+.lb-rank{font-family:var(--mono);font-size:12px;color:var(--muted);width:24px}
+.lb-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.lb-name{flex:1;font-size:13px;font-weight:500}
+.lb-score{font-family:var(--mono);font-size:12px;color:var(--accent2)}
+
+/* ── SIMULATIONS PAGE ── */
+.sims-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.sims-header h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.filter-tabs{display:flex;gap:6px}
+.ftab{padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted2);transition:all .15s}
+.ftab.active,.ftab:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sims-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sim-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.sim-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.sim-card-header{height:90px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.sim-card-difficulty{position:absolute;top:10px;right:10px;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:600;font-family:var(--mono)}
+.diff-easy{background:rgba(52,211,153,.15);color:var(--accent2)}
+.diff-med{background:rgba(245,158,11,.15);color:var(--accent3)}
+.diff-hard{background:rgba(248,113,113,.15);color:var(--rose)}
+.sim-card-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.sim-card-title{font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em}
+.sim-card-desc{font-size:12px;color:var(--muted2);line-height:1.5;margin-bottom:12px;flex:1}
+.sim-card-meta{display:flex;gap:12px;font-size:11px;color:var(--muted);margin-bottom:14px}
+.sim-card-progress{height:3px;background:var(--s2);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.sim-card-prog-fill{height:100%;border-radius:2px;transition:width .4s}
+.sim-card-btn{width:100%;padding:9px;border-radius:8px;border:none;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.scb-start{background:var(--accent);color:#fff}
+.scb-start:hover{background:#6a5ee8}
+.scb-continue{background:rgba(124,110,250,.15);color:var(--accent);border:1px solid rgba(124,110,250,.3)}
+.scb-done{background:rgba(52,211,153,.1);color:var(--accent2);cursor:default;border:1px solid rgba(52,211,153,.2)}
+
+/* ── IDE PAGE ── */
+#ide-page{display:none;flex:1;overflow:hidden;flex-direction:column}
+#ide-page.active{display:flex}
+.ide-topbar{height:44px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+.ide-sim-title{font-size:13px;font-weight:700;color:var(--text)}
+.ide-task-info{font-size:12px;color:var(--muted2)}
+.ide-timer{font-family:var(--mono);font-size:13px;padding:4px 12px;border-radius:6px;font-weight:500}
+.timer-ok{background:rgba(52,211,153,.1);color:var(--accent2);border:1px solid rgba(52,211,153,.2)}
+.timer-warn{background:rgba(245,158,11,.1);color:var(--accent3);border:1px solid rgba(245,158,11,.2)}
+.timer-danger{background:rgba(248,113,113,.1);color:var(--rose);border:1px solid rgba(248,113,113,.2)}
+.ide-run-btn{margin-left:auto;padding:6px 20px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.ide-run-btn:hover{background:#6a5ee8}
+.ide-submit-btn{padding:6px 16px;background:rgba(52,211,153,.12);color:var(--accent2);border:1px solid rgba(52,211,153,.25);border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.ide-submit-btn:hover{background:rgba(52,211,153,.22)}
+.ide-layout{flex:1;display:grid;grid-template-columns:280px 1fr 260px;overflow:hidden}
+
+/* Task panel */
+.task-panel{background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.task-header{padding:16px;border-bottom:1px solid var(--border)}
+.task-steps{padding:12px}
+.task-step{padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.task-step:hover{background:var(--s2)}
+.task-step.ts-active{background:rgba(124,110,250,.1);border-color:rgba(124,110,250,.25)}
+.task-step.ts-done{opacity:.6}
+.ts-num{font-size:10px;font-family:var(--mono);color:var(--muted);margin-bottom:3px}
+.ts-title{font-size:12px;font-weight:600;margin-bottom:2px}
+.ts-time{font-size:11px;color:var(--muted2)}
+.task-desc{padding:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted2);line-height:1.7;flex:1;overflow-y:auto}
+.task-desc h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
+.task-desc p{margin-bottom:10px}
+.task-desc code{font-family:var(--mono);font-size:11px;background:var(--s3);padding:1px 5px;border-radius:3px;color:var(--accent)}
+.task-desc ul{margin:8px 0 10px 16px;display:flex;flex-direction:column;gap:4px}
+.task-desc li{font-size:12px;color:var(--muted2)}
+
+/* Code editor */
+.editor-area{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.editor-tabs{height:36px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:flex-end;padding:0 12px;gap:2px;flex-shrink:0}
+.etab{padding:6px 14px;font-size:12px;color:var(--muted2);cursor:pointer;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;font-family:var(--ff)}
+.etab.active{background:var(--bg);color:var(--text);border-color:var(--border);font-weight:600}
+.editor-wrap{flex:1;overflow:hidden;position:relative}
+#code-editor{width:100%;height:100%;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:13px;color:#C9D1D9;padding:16px;resize:none;line-height:1.7;tab-size:2}
+.line-nums{position:absolute;left:0;top:0;bottom:0;width:40px;background:var(--s1);padding:16px 0;display:flex;flex-direction:column;align-items:flex-end;padding-right:10px;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.7;pointer-events:none;border-right:1px solid var(--border);overflow:hidden}
+
+/* Output panel */
+.output-panel{background:var(--s1);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.op-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.optab{flex:1;padding:10px 6px;font-size:11px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);transition:all .15s;border-bottom:2px solid transparent}
+.optab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.op-content{flex:1;overflow-y:auto}
+.console-area{padding:12px;font-family:var(--mono);font-size:12px;line-height:1.7}
+.console-line{margin-bottom:2px;display:flex;gap:8px}
+.cl-prompt{color:var(--muted)}
+.cl-ok{color:var(--accent2)}
+.cl-err{color:var(--rose)}
+.cl-info{color:var(--accent)}
+.cl-warn{color:var(--accent3)}
+.tests-area{padding:12px}
+.test-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:6px;font-size:12px;border:1px solid var(--border)}
+.test-pass{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.2)}
+.test-fail{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.2)}
+.test-pending{background:var(--s2)}
+.test-icon{font-size:14px;flex-shrink:0}
+.test-name{flex:1;color:var(--muted2)}
+.test-ms{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.score-area{padding:16px}
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:16px 0}
+.score-ring{width:100px;height:100px;position:relative}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-ring-n{font-size:22px;font-weight:800;color:var(--text)}
+.score-ring-l{font-size:10px;color:var(--muted)}
+.score-breakdown{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.sb-row{display:flex;align-items:center;gap:8px;font-size:11px}
+.sb-label{color:var(--muted2);flex:1}
+.sb-bar{flex:2;height:4px;background:var(--s2);border-radius:2px;overflow:hidden}
+.sb-fill{height:100%;border-radius:2px}
+.sb-val{font-family:var(--mono);color:var(--muted2);min-width:28px;text-align:right}
+.hints-area{padding:12px;display:flex;flex-direction:column;gap:8px}
+.hint-item{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted2);line-height:1.5;cursor:pointer}
+.hint-item strong{color:var(--accent3)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--s2);border:1px solid var(--border2);border-radius:20px;padding:40px;max-width:500px;width:90%;text-align:center;animation:popIn .3s ease}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.modal-icon{font-size:52px;margin-bottom:16px}
+.modal-title{font-size:24px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--muted2);line-height:1.6;margin-bottom:28px}
+.modal-score{font-size:56px;font-weight:900;color:var(--accent2);letter-spacing:-.04em;margin:8px 0}
+.modal-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.mbtn{padding:12px 28px;border-radius:10px;font-family:var(--ff);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.mbtn-primary{background:var(--accent);color:#fff}
+.mbtn-primary:hover{background:#6a5ee8}
+.mbtn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted2)}
+.mbtn-ghost:hover{color:var(--text)}
+.cert-preview{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;margin:16px 0;text-align:left}
+.cert-id{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:6px}
+.cert-name{font-size:18px;font-weight:800;margin-bottom:4px}
+.cert-role{font-size:13px;color:var(--muted2)}
+
+/* ── PROFILE PAGE ── */
+.profile-header{display:flex;gap:24px;align-items:flex-start;margin-bottom:28px;padding:24px;background:var(--s1);border:1px solid var(--border);border-radius:16px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;flex-shrink:0}
+.profile-info h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.profile-info p{font-size:13px;color:var(--muted2);margin-bottom:12px}
+.profile-tags{display:flex;gap:8px;flex-wrap:wrap}
+.ptag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(124,110,250,.12);border:1px solid rgba(124,110,250,.2);color:var(--accent)}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.pstat{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.pstat-num{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--accent)}
+.pstat-label{font-size:11px;color:var(--muted2);margin-top:4px}
+.certs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cert-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.cert-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cert-card-icon{font-size:28px;margin-bottom:12px}
+.cert-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.cert-card-date{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:10px}
+.cert-card-score{display:flex;align-items:center;gap:8px}
+.cert-score-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+
+/* ── WELCOME SCREEN ── */
+#welcome-screen{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.ws-logo{font-size:48px;margin-bottom:8px}
+.ws-title{font-size:32px;font-weight:800;letter-spacing:-.03em}
+.ws-sub{font-size:15px;color:var(--muted2);margin-bottom:24px}
+.ws-form{display:flex;flex-direction:column;gap:12px;width:320px}
+.ws-input{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:var(--ff);font-size:15px;outline:none;transition:border-color .15s}
+.ws-input:focus{border-color:var(--accent)}
+.ws-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-family:var(--ff);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+.ws-btn:hover{background:#6a5ee8}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+
+/* color helpers */
+.c-purple{color:var(--accent)} .c-green{color:var(--accent2)} .c-amber{color:var(--accent3)} .c-rose{color:var(--rose)}
+.bg-purple{background:rgba(124,110,250,.15)}
+.bg-green{background:rgba(52,211,153,.12)}
+.bg-amber{background:rgba(245,158,11,.12)}
+.bg-rose{background:rgba(248,113,113,.12)}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="welcome-screen">
+  <div class="ws-logo">🚀</div>
+  <div class="ws-title">Welcome to SimWork</div>
+  <div class="ws-sub">India's #1 Job Simulation Platform for Freshers</div>
+  <div class="ws-form">
+    <input class="ws-input" id="ws-name" placeholder="Your full name" value="Vishvajit Gadakari">
+    <input class="ws-input" id="ws-role" placeholder="Your target role (e.g. Software Dev)">
+    <button class="ws-btn" onclick="startApp()">Start Simulating →</button>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="tb-logo"><div class="tb-logo-sq">S</div>SimWork</div>
+  <div class="tb-sep"></div>
+  <div class="tb-breadcrumb" id="tb-breadcrumb">Dashboard</div>
+  <div class="tb-right">
+    <div class="tb-score" id="tb-score">XP: 0</div>
+    <div class="tb-avatar" id="tb-avatar">VG</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-section">Main</div>
+    <div class="sb-item active" onclick="navigate('dashboard')"><span class="icon">🏠</span>Dashboard</div>
+    <div class="sb-item" onclick="navigate('simulations')"><span class="icon">🎯</span>Simulations<span class="sb-badge" id="sb-new-badge">3</span></div>
+    <div class="sb-item" onclick="navigate('profile')"><span class="icon">👤</span>My Profile</div>
+    <div class="sb-item" onclick="navigate('leaderboard-page')"><span class="icon">🏆</span>Leaderboard</div>
+
+    <div class="sb-section">Active Sim</div>
+    <div class="sb-item" id="sb-ide-item" onclick="navigate('ide')" style="display:none"><span class="icon">💻</span>IDE &amp; Tasks</div>
+
+    <div class="sb-section">Resources</div>
+    <div class="sb-item" onclick="showToast('Coming soon!')"><span class="icon">📚</span>Docs</div>
+    <div class="sb-item" onclick="showToast('Community launching soon!')"><span class="icon">💬</span>Community</div>
+    <div class="sb-section">Account</div>
+    <div class="sb-item" onclick="showToast('Settings coming soon!')"><span class="icon">⚙️</span>Settings</div>
+
+    <div class="sb-progress">
+      <div class="sb-prog-label">Overall Progress</div>
+      <div class="sb-prog-bar"><div class="sb-prog-fill" id="sb-prog-fill" style="width:0%"></div></div>
+      <div class="sb-prog-stat" id="sb-prog-stat">0 / 3 simulations</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-welcome">
+        <h1 id="dash-greeting">Welcome back, Vishvajit 👋</h1>
+        <p>You have 1 active simulation. Keep going!</p>
+      </div>
+      <div class="dash-stats">
+        <div class="stat-card"><div class="stat-card-num c-purple" id="ds-xp">0</div><div class="stat-card-label">Total XP Earned</div></div>
+        <div class="stat-card"><div class="stat-card-num c-green" id="ds-done">0</div><div class="stat-card-label">Simulations Completed</div></div>
+        <div class="stat-card"><div class="stat-card-num c-amber" id="ds-certs">0</div><div class="stat-card-label">Certificates Earned</div></div>
+        <div class="stat-card"><div class="stat-card-num c-rose" id="ds-rank">#42</div><div class="stat-card-label">Leaderboard Rank</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-title">🎯 Your Simulations</div>
+          <div id="dash-sim-list"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">📊 Recent Activity</div>
+          <div id="dash-activity"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">🏆 Top Performers</div>
+          <div id="dash-leaderboard"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">💡 Quick Tips</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+            <div style="background:rgba(124,110,250,.08);border:1px solid rgba(124,110,250,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent)">Read the task brief</strong> carefully before starting. Understanding requirements = higher scores.</div>
+            <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent2)">Run tests frequently.</strong> Don't wait until submission. Each run gives you feedback.</div>
+            <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent3)">Check hints</strong> if stuck. Each hint costs 5 XP but saves time and stress.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIMULATIONS PAGE -->
+    <div class="page" id="page-simulations">
+      <div class="sims-header">
+        <h1>Job Simulations</h1>
+        <div class="filter-tabs">
+          <div class="ftab active" onclick="filterSims('all',this)">All</div>
+          <div class="ftab" onclick="filterSims('active',this)">In Progress</div>
+          <div class="ftab" onclick="filterSims('done',this)">Completed</div>
+          <div class="ftab" onclick="filterSims('locked',this)">Locked</div>
+        </div>
+      </div>
+      <div class="sims-grid" id="sims-grid"></div>
+    </div>
+
+    <!-- IDE PAGE -->
+    <div id="ide-page" class="page" id="page-ide">
+      <div class="ide-topbar">
+        <div class="ide-sim-title" id="ide-sim-title">Software Dev Simulation</div>
+        <div class="ide-task-info" id="ide-task-info">Task 1 of 5</div>
+        <div class="ide-timer timer-ok" id="ide-timer">⏱ 45:00</div>
+        <button class="ide-run-btn" onclick="runCode()">▶ Run Code</button>
+        <button class="ide-submit-btn" onclick="submitTask()">Submit Task</button>
+      </div>
+      <div class="ide-layout">
+        <!-- Task panel -->
+        <div class="task-panel">
+          <div class="task-header">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:6px">TASKS</div>
+            <div id="task-steps-list"></div>
+          </div>
+          <div class="task-desc" id="task-description"></div>
+        </div>
+        <!-- Editor -->
+        <div class="editor-area">
+          <div class="editor-tabs">
+            <div class="etab active">solution.js</div>
+            <div class="etab" onclick="showToast('Read-only reference file')">utils.js</div>
+          </div>
+          <div class="editor-wrap">
+            <div class="line-nums" id="line-nums"></div>
+            <textarea id="code-editor" style="padding-left:52px" spellcheck="false" oninput="updateLineNums()"></textarea>
+          </div>
+        </div>
+        <!-- Output -->
+        <div class="output-panel">
+          <div class="op-tabs">
+            <div class="optab active" onclick="switchOpTab('console',this)">Console</div>
+            <div class="optab" onclick="switchOpTab('tests',this)">Tests</div>
+            <div class="optab" onclick="switchOpTab('score',this)">Score</div>
+            <div class="optab" onclick="switchOpTab('hints',this)">Hints</div>
+          </div>
+          <div class="op-content">
+            <div id="op-console" class="console-area"></div>
+            <div id="op-tests" class="tests-area" style="display:none"></div>
+            <div id="op-score" class="score-area" style="display:none"></div>
+            <div id="op-hints" class="hints-area" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div class="page" id="page-profile">
+      <div class="profile-header">
+        <div class="profile-avatar" id="p-avatar">VG</div>
+        <div class="profile-info">
+          <h2 id="p-name">Vishvajit Gadakari</h2>
+          <p id="p-role">Aspiring Software Developer · Pune, India</p>
+          <div class="profile-tags" id="p-tags">
+            <span class="ptag">JavaScript</span>
+            <span class="ptag">Node.js</span>
+            <span class="ptag">React</span>
+          </div>
+        </div>
+        <button class="mbtn mbtn-primary" style="margin-left:auto" onclick="showToast('Profile share link copied!')">Share Profile 🔗</button>
+      </div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num" id="p-xp">0</div><div class="pstat-label">Total XP</div></div>
+        <div class="pstat"><div class="pstat-num" id="p-sims">0</div><div class="pstat-label">Sims Done</div></div>
+        <div class="pstat"><div class="pstat-num" id="p-certs-count">0</div><div class="pstat-label">Certificates</div></div>
+      </div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em">🏅 Certificates Earned</div>
+      <div class="certs-grid" id="certs-grid"></div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div class="page" id="page-leaderboard-page">
+      <div style="margin-bottom:24px"><h1 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px">🏆 Leaderboard</h1><p style="font-size:14px;color:var(--muted2)">Top performers across all simulations this month</p></div>
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden" id="full-leaderboard"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-complete">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">Task Complete!</div>
+    <div class="modal-sub">Excellent work. You passed all tests and scored:</div>
+    <div class="modal-score" id="modal-score">92</div>
+    <div class="cert-preview" id="modal-cert" style="display:none">
+      <div class="cert-id" id="cert-id-text">CERT-SW-2025-0001</div>
+      <div class="cert-name" id="cert-name-text">Certificate of Completion</div>
+      <div class="cert-role" id="cert-role-text">Software Developer Simulation</div>
+    </div>
+    <div class="modal-actions">
+      <button class="mbtn mbtn-primary" id="modal-next-btn" onclick="nextTask()">Next Task →</button>
+      <button class="mbtn mbtn-ghost" onclick="closeModal()">Stay Here</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-sim-complete">
+  <div class="modal">
+    <div class="modal-icon">🏆</div>
+    <div class="modal-title">Simulation Complete!</div>
+    <div class="modal-sub">You've completed the entire simulation. Here's your final certificate:</div>
+    <div class="cert-preview">
+      <div class="cert-id" id="sc-cert-id">CERT-SW-2025-0001</div>
+      <div class="cert-name" id="sc-cert-name">Vishvajit Gadakari</div>
+      <div class="cert-role" id="sc-cert-role">has completed the Software Developer Simulation</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--accent2)">Score: <strong id="sc-score">0</strong>/100 · Issued: <span id="sc-date"></span></div>
+    </div>
+    <div class="modal-actions">
+      <button class="mbtn mbtn-primary" onclick="downloadCert()">Download Certificate 📄</button>
+      <button class="mbtn mbtn-ghost" onclick="closeSimModal();navigate('simulations')">Back to Simulations</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;z-index:500;transform:translateY(80px);opacity:0;transition:all .3s"></div>
+
+<script>
+// ── STATE ──
+let user = { name: 'Vishvajit Gadakari', role: 'Software Developer', xp: 0, certs: [] };
+let currentSim = null;
+let currentTaskIndex = 0;
+let timerInterval = null;
+let timerSeconds = 0;
+let taskResults = {};
+let hintsUsed = 0;
+
+const SIMULATIONS = [
+  {
+    id: 'sw',
+    title: 'Software Developer',
+    icon: '💻',
+    color: '#7C6EFA',
+    bgClass: 'bg-purple',
+    difficulty: 'Intermediate',
+    diffClass: 'diff-med',
+    desc: 'Build REST APIs, debug code, and work with databases — just like a junior dev at a real company.',
+    duration: '3 hours',
+    tasks: 5,
+    xp: 500,
+    status: 'active',
+    progress: 0,
+    tasks_data: [
+      {
+        title: 'Hello World API',
+        time: '20 min',
+        desc: `<h3>Task 1: Create a Hello World Endpoint</h3><p>Your first task is to set up a basic Express.js server and create a <code>GET /hello</code> endpoint that returns a JSON response.</p><p>Requirements:</p><ul><li>Return status code 200</li><li>Return JSON: <code>{ message: "Hello, SimWork!" }</code></li><li>Include a <code>timestamp</code> field with the current ISO date</li></ul>`,
+        starterCode: `// Task 1: Hello World API\nconst express = require('express');\nconst app = express();\n\n// TODO: Create GET /hello endpoint\n// Should return: { message: "Hello, SimWork!", timestamp: "..." }\n\napp.get('/hello', (req, res) => {\n  // Your code here\n  \n});\n\napp.listen(3000, () => console.log('Server running on port 3000'));\n\nmodule.exports = app;`,
+        solution: `app.get('/hello', (req, res) => {\n  res.status(200).json({\n    message: "Hello, SimWork!",\n    timestamp: new Date().toISOString()\n  });\n});`,
+        tests: ['GET /hello returns 200','Response has message field','Response has timestamp field','message equals "Hello, SimWork!"','Content-Type is application/json']
+      },
+      {
+        title: 'User CRUD API',
+        time: '35 min',
+        desc: `<h3>Task 2: Build a User CRUD API</h3><p>Implement full Create, Read, Update, Delete operations for a users resource.</p><p>Endpoints required:</p><ul><li><code>GET /users</code> — list all users</li><li><code>GET /users/:id</code> — get single user</li><li><code>POST /users</code> — create user</li><li><code>PUT /users/:id</code> — update user</li><li><code>DELETE /users/:id</code> — delete user</li></ul>`,
+        starterCode: `// Task 2: User CRUD API\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nlet users = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\nlet nextId = 3;\n\n// TODO: Implement all 5 CRUD endpoints\n\nmodule.exports = app;`,
+        solution: `app.get('/users', (req, res) => res.json(users));\napp.get('/users/:id', (req, res) => {\n  const user = users.find(u => u.id === +req.params.id);\n  user ? res.json(user) : res.status(404).json({ error: 'Not found' });\n});\napp.post('/users', (req, res) => {\n  const user = { id: nextId++, ...req.body };\n  users.push(user);\n  res.status(201).json(user);\n});\napp.put('/users/:id', (req, res) => {\n  const idx = users.findIndex(u => u.id === +req.params.id);\n  if(idx === -1) return res.status(404).json({ error: 'Not found' });\n  users[idx] = { ...users[idx], ...req.body };\n  res.json(users[idx]);\n});\napp.delete('/users/:id', (req, res) => {\n  users = users.filter(u => u.id !== +req.params.id);\n  res.json({ success: true });\n});`,
+        tests: ['GET /users returns array','GET /users/:id returns user','POST /users creates user','PUT /users/:id updates user','DELETE /users/:id removes user']
+      },
+      {
+        title: 'Authentication Middleware',
+        time: '40 min',
+        desc: `<h3>Task 3: JWT Authentication</h3><p>Add JWT-based authentication to protect your API endpoints.</p><ul><li>Implement <code>POST /auth/login</code> — validates credentials, returns JWT token</li><li>Create a <code>verifyToken</code> middleware function</li><li>Protect <code>GET /protected</code> route with the middleware</li><li>Return 401 for missing/invalid tokens</li></ul>`,
+        starterCode: `// Task 3: JWT Authentication\nconst express = require('express');\nconst jwt = require('jsonwebtoken');\nconst app = express();\napp.use(express.json());\n\nconst SECRET = 'simwork-secret-key';\nconst users = [{ id: 1, username: 'admin', password: 'password123' }];\n\n// TODO: POST /auth/login\n// TODO: verifyToken middleware\n// TODO: GET /protected (protected route)\n\nmodule.exports = app;`,
+        solution: `app.post('/auth/login', (req, res) => {\n  const { username, password } = req.body;\n  const user = users.find(u => u.username === username && u.password === password);\n  if (!user) return res.status(401).json({ error: 'Invalid credentials' });\n  const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '1h' });\n  res.json({ token });\n});\n\nconst verifyToken = (req, res, next) => {\n  const auth = req.headers.authorization;\n  if (!auth) return res.status(401).json({ error: 'No token' });\n  try {\n    req.user = jwt.verify(auth.split(' ')[1], SECRET);\n    next();\n  } catch { res.status(401).json({ error: 'Invalid token' }); }\n};\n\napp.get('/protected', verifyToken, (req, res) => {\n  res.json({ message: 'Access granted', user: req.user });\n});`,
+        tests: ['POST /auth/login returns token','Invalid credentials return 401','GET /protected without token = 401','GET /protected with valid token = 200','Token contains user id']
+      },
+      {
+        title: 'Database Integration',
+        time: '50 min',
+        desc: `<h3>Task 4: MongoDB Integration</h3><p>Connect your API to MongoDB using Mongoose and implement data persistence.</p><ul><li>Define a <code>User</code> Mongoose schema with: name, email, createdAt</li><li>Implement <code>GET /db/users</code> — fetch all from DB</li><li>Implement <code>POST /db/users</code> — save to DB with validation</li><li>Handle duplicate email errors gracefully</li></ul>`,
+        starterCode: `// Task 4: MongoDB Integration\nconst mongoose = require('mongoose');\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nmongoose.connect('mongodb://localhost/simwork');\n\n// TODO: Define User schema\n// Fields: name (required), email (required, unique), createdAt (default: Date.now)\n\n// TODO: GET /db/users\n// TODO: POST /db/users (with validation + duplicate handling)\n\nmodule.exports = app;`,
+        solution: `const userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true },\n  createdAt: { type: Date, default: Date.now }\n});\nconst User = mongoose.model('User', userSchema);\n\napp.get('/db/users', async (req, res) => {\n  const users = await User.find();\n  res.json(users);\n});\n\napp.post('/db/users', async (req, res) => {\n  try {\n    const user = await User.create(req.body);\n    res.status(201).json(user);\n  } catch(e) {\n    if (e.code === 11000) return res.status(409).json({ error: 'Email already exists' });\n    res.status(400).json({ error: e.message });\n  }\n});`,
+        tests: ['User schema has required fields','GET /db/users returns array','POST /db/users creates document','Duplicate email returns 409','Missing required field returns 400']
+      },
+      {
+        title: 'Final Integration',
+        time: '45 min',
+        desc: `<h3>Task 5: Final Integration & Error Handling</h3><p>Tie everything together with proper error handling, input validation, and rate limiting.</p><ul><li>Add global error handling middleware</li><li>Validate request bodies using basic checks</li><li>Add rate limiting: max 100 requests per 15 minutes per IP</li><li>Return consistent error response format: <code>{ error, code, timestamp }</code></li></ul>`,
+        starterCode: `// Task 5: Final Integration\nconst express = require('express');\nconst rateLimit = require('express-rate-limit');\nconst app = express();\napp.use(express.json());\n\n// TODO: Configure rate limiter (100 req / 15 min)\n\n// TODO: Input validation middleware\nconst validateUser = (req, res, next) => {\n  // Validate name and email are present and valid\n};\n\n// TODO: POST /api/users with validation\n\n// TODO: Global error handling middleware (4 params: err, req, res, next)\n\nmodule.exports = app;`,
+        solution: `const limiter = rateLimit({ windowMs: 15*60*1000, max: 100 });\napp.use(limiter);\n\nconst validateUser = (req, res, next) => {\n  const { name, email } = req.body;\n  if (!name || !email) return res.status(400).json({ error: 'name and email required', code: 'VALIDATION_ERROR', timestamp: new Date().toISOString() });\n  if (!/^[^@]+@[^@]+\\.[^@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email format', code: 'VALIDATION_ERROR', timestamp: new Date().toISOString() });\n  next();\n};\n\napp.post('/api/users', validateUser, (req, res) => {\n  res.status(201).json({ ...req.body, id: Date.now() });\n});\n\napp.use((err, req, res, next) => {\n  console.error(err);\n  res.status(500).json({ error: 'Internal server error', code: 'SERVER_ERROR', timestamp: new Date().toISOString() });\n});`,
+        tests: ['Rate limiter configured correctly','Validation rejects missing fields','Validation rejects invalid email','Error response has consistent format','Global error handler catches exceptions']
+      }
+    ]
+  },
+  {
+    id: 'ds',
+    title: 'Data Science',
+    icon: '📊',
+    color: '#34D399',
+    bgClass: 'bg-green',
+    difficulty: 'Beginner',
+    diffClass: 'diff-easy',
+    desc: 'Analyse datasets, build models, and visualise insights — real data science work from day one.',
+    duration: '2.5 hours',
+    tasks: 4,
+    xp: 400,
+    status: 'locked',
+    progress: 0,
+    tasks_data: []
+  },
+  {
+    id: 'fin',
+    title: 'Finance Analyst',
+    icon: '💰',
+    color: '#F59E0B',
+    bgClass: 'bg-amber',
+    difficulty: 'Hard',
+    diffClass: 'diff-hard',
+    desc: 'Build financial models, analyse P&L statements, and create investor reports — real finance work.',
+    duration: '4 hours',
+    tasks: 6,
+    xp: 600,
+    status: 'locked',
+    progress: 0,
+    tasks_data: []
+  }
+];
+
+const LEADERBOARD = [
+  { name: 'Priya Sharma', score: 2840, avatar: 'PS', color: '#7C6EFA' },
+  { name: 'Arjun Mehta', score: 2710, avatar: 'AM', color: '#34D399' },
+  { name: 'Neha Verma', score: 2590, avatar: 'NV', color: '#F59E0B' },
+  { name: 'Rohit Kumar', score: 2450, avatar: 'RK', color: '#F87171' },
+  { name: 'Sneha Patil', score: 2300, avatar: 'SP', color: '#60A5FA' },
+];
+
+const ACTIVITIES = [
+  { text: 'You started Software Developer simulation', time: '2 hrs ago', color: '#7C6EFA' },
+  { text: 'Profile updated with JavaScript skills', time: '1 day ago', color: '#34D399' },
+  { text: 'Joined SimWork platform', time: '2 days ago', color: '#F59E0B' },
+];
+
+// ── INIT ──
+function startApp() {
+  const name = document.getElementById('ws-name').value.trim() || 'User';
+  const role = document.getElementById('ws-role').value.trim() || 'Software Developer';
+  user.name = name;
+  user.role = role;
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('tb-avatar').textContent = initials;
+  document.getElementById('p-avatar').textContent = initials;
+  document.getElementById('p-name').textContent = name;
+  document.getElementById('p-role').textContent = role + ' · Pune, India';
+  document.getElementById('dash-greeting').textContent = `Welcome back, ${name.split(' ')[0]} 👋`;
+  document.getElementById('welcome-screen').style.display = 'none';
+  renderAll();
+}
+
+function renderAll() {
+  renderDashboard();
+  renderSimsGrid();
+  renderProfile();
+  renderFullLeaderboard();
+  updateXP();
+}
+
+function updateXP() {
+  document.getElementById('tb-score').textContent = `XP: ${user.xp}`;
+  document.getElementById('ds-xp').textContent = user.xp;
+  document.getElementById('p-xp').textContent = user.xp;
+  const done = SIMULATIONS.filter(s=>s.status==='done').length;
+  document.getElementById('ds-done').textContent = done;
+  document.getElementById('p-sims').textContent = done;
+  document.getElementById('ds-certs').textContent = user.certs.length;
+  document.getElementById('p-certs-count').textContent = user.certs.length;
+  const totalSims = SIMULATIONS.length;
+  const pct = Math.round((done/totalSims)*100);
+  document.getElementById('sb-prog-fill').style.width = pct+'%';
+  document.getElementById('sb-prog-stat').textContent = `${done} / ${totalSims} simulations`;
+}
+
+function renderDashboard() {
+  // Sim list
+  const el = document.getElementById('dash-sim-list');
+  el.innerHTML = SIMULATIONS.map(s => `
+    <div class="sim-row" onclick="openSim('${s.id}')">
+      <div class="sim-icon ${s.bgClass}">${s.icon}</div>
+      <div class="sim-info">
+        <div class="sim-name">${s.title}</div>
+        <div class="sim-meta">${s.tasks} tasks · ${s.xp} XP</div>
+      </div>
+      <div class="sim-status status-${s.status}">${s.status==='active'?'In Progress':s.status==='done'?'Completed':'Locked'}</div>
+    </div>`).join('');
+
+  // Activity
+  const ae = document.getElementById('dash-activity');
+  ae.innerHTML = ACTIVITIES.map(a => `
+    <div class="activity-item">
+      <div class="act-dot" style="background:${a.color}"></div>
+      <div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div>
+    </div>`).join('');
+
+  // Leaderboard preview
+  const initials = user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const allLB = [{ name: user.name, score: user.xp, avatar: initials, color: '#7C6EFA', isMe: true }, ...LEADERBOARD].sort((a,b)=>b.score-a.score).slice(0,5);
+  const le = document.getElementById('dash-leaderboard');
+  le.innerHTML = allLB.map((l,i) => `
+    <div class="leaderboard-row">
+      <div class="lb-rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div class="lb-avatar" style="background:${l.color}22;color:${l.color}">${l.avatar}</div>
+      <div class="lb-name" style="${l.isMe?'color:var(--accent);font-weight:700':''}"> ${l.name}${l.isMe?' (you)':''}</div>
+      <div class="lb-score">${l.score} XP</div>
+    </div>`).join('');
+}
+
+function renderSimsGrid(filter='all') {
+  const grid = document.getElementById('sims-grid');
+  const filtered = filter==='all' ? SIMULATIONS : SIMULATIONS.filter(s=>s.status===filter);
+  grid.innerHTML = filtered.map(s => {
+    const pct = s.progress;
+    const btnClass = s.status==='active'?'scb-continue':s.status==='done'?'scb-done':'scb-start';
+    const btnText = s.status==='active'?'Continue →':s.status==='done'?'✓ Completed':'Start Simulation →';
+    const disabled = s.status==='done'?'disabled':'';
+    return `
+    <div class="sim-card" onclick="openSim('${s.id}')">
+      <div class="sim-card-header" style="background:${s.color}18">
+        ${s.icon}
+        <div class="sim-card-difficulty ${s.diffClass}">${s.difficulty}</div>
+      </div>
+      <div class="sim-card-body">
+        <div class="sim-card-title">${s.title} Simulation</div>
+        <div class="sim-card-desc">${s.desc}</div>
+        <div class="sim-card-meta">
+          <span>⏱ ${s.duration}</span>
+          <span>📋 ${s.tasks} tasks</span>
+          <span>⚡ ${s.xp} XP</span>
+        </div>
+        <div class="sim-card-progress"><div class="sim-card-prog-fill" style="width:${pct}%;background:${s.color}"></div></div>
+        <button class="sim-card-btn ${btnClass}" ${disabled}>${btnText}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterSims(f, el) {
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderSimsGrid(f);
+}
+
+function renderProfile() {
+  const grid = document.getElementById('certs-grid');
+  if(user.certs.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:14px">Complete simulations to earn certificates 🏅</div>`;
+    return;
+  }
+  grid.innerHTML = user.certs.map(c => `
+    <div class="cert-card" style="border-top-color:${c.color}">
+      <div class="cert-card-icon">${c.icon}</div>
+      <div class="cert-card-title">${c.title} Certificate</div>
+      <div class="cert-card-date">${c.date} · ID: ${c.id}</div>
+      <div class="cert-card-score">
+        <div class="cert-score-badge" style="background:${c.color}18;color:${c.color}">${c.score}/100</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderFullLeaderboard() {
+  const initials = user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const allLB = [{ name: user.name, score: user.xp, avatar: initials, color: '#7C6EFA', isMe: true }, ...LEADERBOARD].sort((a,b)=>b.score-a.score);
+  const el = document.getElementById('full-leaderboard');
+  el.innerHTML = allLB.map((l,i) => `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);${l.isMe?'background:rgba(124,110,250,.06)':''}">
+      <div style="font-family:var(--mono);font-size:14px;font-weight:700;width:36px;color:var(--muted)">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:${l.color}22;color:${l.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">${l.avatar}</div>
+      <div style="flex:1;font-size:14px;font-weight:${l.isMe?700:500};color:${l.isMe?'var(--accent)':'var(--text)'}">${l.name}${l.isMe?' (you)':''}</div>
+      <div style="font-family:var(--mono);font-size:13px;color:var(--accent2)">${l.score} XP</div>
+    </div>`).join('');
+}
+
+// ── NAVIGATION ──
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+
+  if(page === 'ide') {
+    document.getElementById('ide-page').classList.add('active');
+    document.getElementById('ide-page').style.display='flex';
+    document.getElementById('sb-ide-item').classList.add('active');
+    document.getElementById('tb-breadcrumb').textContent = currentSim?.title + ' → IDE';
+    return;
+  }
+
+  document.getElementById('ide-page').classList.remove('active');
+  document.getElementById('ide-page').style.display='none';
+  const pg = document.getElementById('page-'+page);
+  if(pg) { pg.classList.add('active'); }
+  document.querySelectorAll('.sb-item').forEach(i=>{
+    if(i.getAttribute('onclick')?.includes(`'${page}'`)) i.classList.add('active');
+  });
+  const labels = {dashboard:'Dashboard',simulations:'Simulations',profile:'My Profile','leaderboard-page':'Leaderboard'};
+  document.getElementById('tb-breadcrumb').textContent = labels[page] || page;
+  if(page==='profile'){renderProfile();updateXP();}
+  if(page==='leaderboard-page'){renderFullLeaderboard();}
+}
+
+// ── SIMULATION ──
+function openSim(id) {
+  const sim = SIMULATIONS.find(s=>s.id===id);
+  if(!sim) return;
+  if(sim.status==='locked') { showToast('🔒 Complete previous simulations first!'); return; }
+  if(sim.status==='done') { showToast('✅ Already completed! Check your profile.'); navigate('profile'); return; }
+  currentSim = sim;
+  currentTaskIndex = 0;
+  taskResults = {};
+  hintsUsed = 0;
+  document.getElementById('sb-ide-item').style.display='flex';
+  loadTask(0);
+  navigate('ide');
+}
+
+function loadTask(idx) {
+  if(!currentSim || !currentSim.tasks_data[idx]) return;
+  currentTaskIndex = idx;
+  const task = currentSim.tasks_data[idx];
+  const total = currentSim.tasks_data.length;
+
+  document.getElementById('ide-sim-title').textContent = currentSim.title + ' Simulation';
+  document.getElementById('ide-task-info').textContent = `Task ${idx+1} of ${total}`;
+
+  // Task steps
+  const stepsList = document.getElementById('task-steps-list');
+  stepsList.innerHTML = currentSim.tasks_data.map((t,i) => `
+    <div class="task-step ${i===idx?'ts-active':''} ${taskResults[i]?'ts-done':''}" onclick="switchTask(${i})">
+      <div class="ts-num">TASK ${i+1}</div>
+      <div class="ts-title">${t.title} ${taskResults[i]?'✓':''}</div>
+      <div class="ts-time">${t.time}</div>
+    </div>`).join('');
+
+  // Task description
+  document.getElementById('task-description').innerHTML = task.desc;
+
+  // Code editor
+  const editor = document.getElementById('code-editor');
+  editor.value = task.starterCode;
+  updateLineNums();
+
+  // Timer
+  clearInterval(timerInterval);
+  const mins = parseInt(task.time);
+  timerSeconds = mins * 60;
+  updateTimer();
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimer();
+    if(timerSeconds <= 0) { clearInterval(timerInterval); showToast('⏰ Time is up! Submitting...'); submitTask(); }
+  }, 1000);
+
+  // Reset output
+  clearConsole();
+  renderTests(task.tests, 'pending');
+  renderScore(0);
+  renderHints(idx);
+  switchOpTab('console', document.querySelector('.optab'));
+}
+
+function switchTask(idx) {
+  if(idx !== currentTaskIndex) loadTask(idx);
+}
+
+function updateTimer() {
+  const m = Math.floor(timerSeconds/60).toString().padStart(2,'0');
+  const s = (timerSeconds%60).toString().padStart(2,'0');
+  const el = document.getElementById('ide-timer');
+  el.textContent = `⏱ ${m}:${s}`;
+  el.className = 'ide-timer ' + (timerSeconds > 300 ? 'timer-ok' : timerSeconds > 60 ? 'timer-warn' : 'timer-danger');
+}
+
+function updateLineNums() {
+  const code = document.getElementById('code-editor').value;
+  const lines = code.split('\n').length;
+  const el = document.getElementById('line-nums');
+  el.innerHTML = Array.from({length: lines}, (_,i) => `<span>${i+1}</span>`).join('');
+}
+
+function clearConsole() {
+  document.getElementById('op-console').innerHTML = `
+    <div class="console-line"><span class="cl-prompt">$</span><span class="cl-info"> SimWork IDE v1.0 ready</span></div>
+    <div class="console-line"><span class="cl-prompt">$</span><span style="color:var(--muted)"> Write your code and press Run</span></div>`;
+}
+
+function runCode() {
+  const console_el = document.getElementById('op-console');
+  const task = currentSim.tasks_data[currentTaskIndex];
+  const code = document.getElementById('code-editor').value;
+
+  // Add running line
+  console_el.innerHTML += `<div class="console-line"><span class="cl-prompt">&gt;</span><span class="cl-info"> Running code...</span></div>`;
+
+  setTimeout(() => {
+    // Basic check: does code contain solution keywords?
+    const sol = task.solution;
+    const solKeywords = sol.split('\n').filter(l=>l.trim().length > 5).map(l=>l.trim().slice(0,20));
+    let matches = 0;
+    solKeywords.forEach(kw => { if(code.includes(kw.slice(0,15))) matches++; });
+    const completeness = Math.min(100, Math.round((matches / Math.max(solKeywords.length,1)) * 100));
+    const passed = Math.floor(completeness / 20);
+
+    if(code.includes('TODO')) {
+      console_el.innerHTML += `<div class="console-line"><span class="cl-warn">⚠ Incomplete: TODO items found in code</span></div>`;
+    }
+    if(code.length < 100) {
+      console_el.innerHTML += `<div class="console-line"><span class="cl-err">✗ Code too short — add your implementation</span></div>`;
+    } else {
+      console_el.innerHTML += `<div class="console-line"><span class="cl-ok">✓ Code parsed successfully</span></div>`;
+      console_el.innerHTML += `<div class="console-line"><span class="cl-info">→ Running test suite (${task.tests.length} tests)...</span></div>`;
+      setTimeout(() => {
+        console_el.innerHTML += `<div class="console-line"><span class="${passed>=3?'cl-ok':'cl-warn'}">${passed >= task.tests.length ? '✓ All tests passed!' : `⚠ ${passed}/${task.tests.length} tests passing`}</span></div>`;
+        renderTests(task.tests, completeness);
+        renderScore(completeness);
+        switchOpTab('tests', document.querySelectorAll('.optab')[1]);
+      }, 400);
+    }
+    console_el.scrollTop = console_el.scrollHeight;
+  }, 600);
+}
+
+function renderTests(tests, completeness) {
+  const el = document.getElementById('op-tests');
+  if(completeness === 'pending') {
+    el.innerHTML = tests.map(t => `
+      <div class="test-item test-pending">
+        <div class="test-icon">○</div>
+        <div class="test-name">${t}</div>
+        <div class="test-ms">— ms</div>
+      </div>`).join('');
+    return;
+  }
+  const passPct = completeness / 100;
+  el.innerHTML = tests.map((t,i) => {
+    const pass = i < Math.round(tests.length * passPct);
+    return `<div class="test-item ${pass?'test-pass':'test-fail'}">
+      <div class="test-icon">${pass?'✅':'❌'}</div>
+      <div class="test-name">${t}</div>
+      <div class="test-ms">${pass ? Math.floor(Math.random()*40+10)+' ms' : 'FAIL'}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderScore(completeness) {
+  const el = document.getElementById('op-score');
+  const c = Math.round(completeness);
+  const r = 40; const circ = 2*Math.PI*r;
+  const offset = circ - (c/100)*circ;
+  const color = c>=80?'var(--accent2)':c>=50?'var(--accent3)':'var(--rose)';
+  const breakdown = [
+    { label:'Correctness', val:Math.round(c*0.5), max:50, color:'var(--accent)' },
+    { label:'Test coverage', val:Math.round(c*0.3), max:30, color:'var(--accent2)' },
+    { label:'Code quality', val:Math.round(c*0.2), max:20, color:'var(--accent3)' },
+  ];
+  el.innerHTML = `
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--s3)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" style="transition:stroke-dashoffset .6s ease"/>
+        </svg>
+        <div class="score-ring-num"><div class="score-ring-n" style="color:${color}">${c}</div><div class="score-ring-l">/ 100</div></div>
+      </div>
+    </div>
+    <div class="score-breakdown">
+      ${breakdown.map(b=>`
+        <div class="sb-row">
+          <div class="sb-label">${b.label}</div>
+          <div class="sb-bar"><div class="sb-fill" style="width:${(b.val/b.max)*100}%;background:${b.color}"></div></div>
+          <div class="sb-val">${b.val}/${b.max}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderHints(taskIdx) {
+  const el = document.getElementById('op-hints');
+  const hints = [
+    `<strong>Hint 1 (Free):</strong> Start by understanding the exact return format expected. Look at the test names carefully.`,
+    `<strong>Hint 2 (-5 XP):</strong> Check the solution structure — how many endpoints/functions are needed?`,
+    `<strong>Hint 3 (-10 XP):</strong> Copy the pattern from the solution and fill in the logic.`,
+  ];
+  el.innerHTML = hints.map((h,i) => `
+    <div class="hint-item" onclick="useHint(${i})">
+      ${h}
+    </div>`).join('') + `<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">Click a hint to reveal · Hints 2+ cost XP</div>`;
+}
+
+function useHint(i) {
+  if(i===0) { showToast('💡 Hint revealed!'); return; }
+  const cost = i===1?5:10;
+  if(user.xp < cost) { showToast(`Need ${cost} XP to unlock this hint`); return; }
+  user.xp -= cost;
+  updateXP();
+  showToast(`💡 Hint used (-${cost} XP)`);
+}
+
+function submitTask() {
+  clearInterval(timerInterval);
+  const task = currentSim.tasks_data[currentTaskIndex];
+  const code = document.getElementById('code-editor').value;
+  const sol = task.solution;
+  const solKws = sol.split('\n').filter(l=>l.trim().length>5).map(l=>l.trim().slice(0,20));
+  let matches = 0;
+  solKws.forEach(kw=>{if(code.includes(kw.slice(0,15))) matches++;});
+  let score = Math.min(100, Math.round((matches/Math.max(solKws.length,1))*100));
+  // Bonus for code length
+  if(code.length > 200 && !code.includes('TODO')) score = Math.min(100, score + 15);
+  score = Math.max(score, code.length > 150 ? 45 : 20);
+
+  taskResults[currentTaskIndex] = { score };
+  const xpEarned = Math.round((score/100) * (currentSim.xp / currentSim.tasks_data.length));
+  user.xp += xpEarned;
+
+  // Update sim progress
+  const doneCount = Object.keys(taskResults).length;
+  currentSim.progress = Math.round((doneCount / currentSim.tasks_data.length)*100);
+
+  const isLastTask = currentTaskIndex === currentSim.tasks_data.length - 1;
+
+  document.getElementById('modal-score').textContent = score;
+  document.getElementById('modal-cert').style.display = 'none';
+
+  if(isLastTask) {
+    currentSim.status = 'done';
+    const avgScore = Math.round(Object.values(taskResults).reduce((a,b)=>a+b.score,0)/Object.keys(taskResults).length);
+    const cert = {
+      id: `CERT-${currentSim.id.toUpperCase()}-2025-${String(user.certs.length+1).padStart(4,'0')}`,
+      title: currentSim.title,
+      icon: currentSim.icon,
+      color: currentSim.color,
+      score: avgScore,
+      date: new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})
+    };
+    user.certs.push(cert);
+
+    document.getElementById('sc-cert-id').textContent = cert.id;
+    document.getElementById('sc-cert-name').textContent = user.name;
+    document.getElementById('sc-cert-role').textContent = `has completed the ${currentSim.title} Simulation`;
+    document.getElementById('sc-score').textContent = avgScore;
+    document.getElementById('sc-date').textContent = cert.date;
+    document.getElementById('modal-sim-complete').classList.add('open');
+
+    if(currentSim.id==='sw') {
+      const ds = SIMULATIONS.find(s=>s.id==='ds');
+      if(ds) ds.status = 'active';
+    }
+    updateXP();
+    renderDashboard();
+    renderSimsGrid();
+  } else {
+    document.getElementById('modal-next-btn').textContent = `Next Task →`;
+    document.getElementById('modal-complete').classList.add('open');
+  }
+  showToast(`+${xpEarned} XP earned! Score: ${score}/100`);
+  updateXP();
+}
+
+function nextTask() {
+  closeModal();
+  if(currentTaskIndex < currentSim.tasks_data.length - 1) {
+    loadTask(currentTaskIndex + 1);
+  }
+}
+
+function closeModal() { document.getElementById('modal-complete').classList.remove('open'); }
+function closeSimModal() { document.getElementById('modal-sim-complete').classList.remove('open'); }
+function downloadCert() { showToast('📄 Certificate PDF downloading... (demo)'); closeSimModal(); navigate('profile'); }
+
+function switchOpTab(tab, el) {
+  document.querySelectorAll('.optab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.optab')[0].classList.add('active');
+  ['console','tests','score','hints'].forEach(t=>{
+    const el2 = document.getElementById('op-'+t);
+    if(el2) el2.style.display = t===tab?'block':'none';
+  });
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity='1';
+  t.style.transform='translateY(0)';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(80px)'},2800);
+}
+
+// Auto-start with default name
+window.addEventListener('load', () => {
+  const ws = document.getElementById('welcome-screen');
+  ws.style.animation = 'none';
+  updateLineNums();
+});
+
+// Tab key in editor
+document.getElementById('code-editor').addEventListener('keydown', e => {
+  if(e.key==='Tab') {
+    e.preventDefault();
+    const s=e.target.selectionStart;
+    e.target.value=e.target.value.substring(0,s)+'  '+e.target.value.substring(e.target.selectionEnd);
+    e.target.selectionStart=e.target.selectionEnd=s+2;
+    updateLineNums();
+  }
+});
+</script>
+</body>
+</html>
