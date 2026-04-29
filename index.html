@@ -13,8 +13,25 @@
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --text:#F0EDF8;--muted:#6B6880;--muted2:#A09DB8;
   --ff:'Plus Jakarta Sans',sans-serif;--mono:'Fira Code',monospace;
-  --sidebar-w:220px;--topbar-h:52px;
+  --sidebar-w:220px;--topbar-h:52px;--hover-bg:#1D1D2E;
 }
+body.light-mode{
+  --bg:#F8F9FA;--s1:#E8E8E8;--s2:#D1D1D1;--s3:#B8B8B8;
+  --accent:#7C6EFA;--accent2:#34D399;--accent3:#F59E0B;--rose:#F87171;--sky:#60A5FA;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --text:#1C1C1E;--muted:#3A3A3A;--muted2:#5A5A5A;--hover-bg:#A0A0A0;
+}
+body.light-mode .stage-btn{border-color:rgba(0,0,0,.16);color:#3A3A3A}
+body.light-mode .stage-btn:hover{background:rgba(0,0,0,.08);color:#1C1C1E}
+body.light-mode .stage-btn.stage-easy{color:rgba(52,211,153,.85)}
+body.light-mode .stage-btn.stage-med{color:rgba(245,158,11,.85)}
+body.light-mode .stage-btn.stage-hard{color:rgba(248,113,113,.85)}
+body.light-mode .stage-btn.stage-easy.sel{background:rgba(52,211,153,.18);border-color:rgba(52,211,153,.55);color:#166534}
+body.light-mode .stage-btn.stage-med.sel{background:rgba(245,158,11,.18);border-color:rgba(245,158,11,.55);color:#92400E}
+body.light-mode .stage-btn.stage-hard.sel{background:rgba(248,113,113,.18);border-color:rgba(248,113,113,.55);color:#991B1B}
+body.light-mode #code-editor{color:#1C1C1E}
+body.light-mode .line-nums{color:#1C1C1E}
+body.light-mode .ide-stage-badge{color:#1C1C1E;background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.12)}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;flex-direction:column}
 
@@ -46,6 +63,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .form-select{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:var(--ff);font-size:14px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color .2s}
 .form-select:focus{border-color:var(--accent)}
 .form-select option{background:var(--s2)}
+[data-tooltip]{position:relative;cursor:help}
+[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap;padding:8px 10px;border-radius:10px;background:rgba(15,15,26,.95);color:#fff;font-size:12px;z-index:99;pointer-events:none;box-shadow:0 12px 28px rgba(0,0,0,.35);}
+[data-tooltip]:hover::before{content:'';position:absolute;left:50%;bottom:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(15,15,26,.95);z-index:99}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-hint{font-size:11px;color:var(--muted);margin-top:5px}
 .form-error{font-size:11px;color:var(--rose);margin-top:5px;display:none}
@@ -75,15 +95,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .tb-dd-user strong{display:block;font-size:13px;color:var(--text);margin-bottom:2px}
 /* HAMBURGER BUTTON */
 .tb-hamburger{background:var(--s2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;padding:6px 9px;color:var(--muted2);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1}
-.tb-hamburger:hover{background:var(--s3);color:var(--text);border-color:var(--accent)}
+.tb-hamburger:hover{background:var(--hover-bg);color:var(--text);border-color:var(--accent)}
 .tb-hamburger.active{background:rgba(124,110,250,.15);color:var(--accent);border-color:rgba(124,110,250,.35)}
+.tb-back{background:var(--s2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;padding:6px 9px;color:var(--muted2);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;margin-right:6px}
+.tb-back:hover:not(:disabled){background:var(--hover-bg);color:var(--text);border-color:var(--accent)}
+.tb-back:disabled{opacity:.4;cursor:not-allowed}
+.tb-theme-toggle{background:var(--s2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;padding:6px 9px;color:var(--muted2);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;margin-right:8px}
+.tb-theme-toggle:hover{background:var(--hover-bg);color:var(--text);border-color:var(--accent)}
 
 /* SIDEBAR */
 #sidebar{width:var(--sidebar-w);background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;transition:width .25s ease, opacity .25s ease, transform .25s ease}
 #sidebar.collapsed{width:0;overflow:hidden;opacity:0;pointer-events:none;border:none}
 .sb-section{padding:12px 10px 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
 .sb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;margin:1px 6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted2);transition:all .15s}
-.sb-item:hover{background:var(--s2);color:var(--text)}
+.sb-item:hover{background:var(--hover-bg);color:var(--text)}
 .sb-item.active{background:rgba(124,110,250,.12);color:var(--accent);border:1px solid rgba(124,110,250,.2)}
 .sb-item .icon{font-size:15px;width:20px;text-align:center}
 .sb-badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px}
@@ -163,13 +188,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 /* STAGE SELECTOR */
 .stage-selector{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .stage-btn{flex:1;padding:6px 8px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:var(--ff);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center;min-width:60px}
-.stage-btn:hover{border-color:var(--border2);color:var(--text)}
+.stage-btn:hover{border-color:var(--border2);background:rgba(255,255,255,.08);color:var(--text)}
 .stage-btn.stage-easy.sel{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:var(--accent2)}
 .stage-btn.stage-med.sel{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:var(--accent3)}
 .stage-btn.stage-hard.sel{background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.4);color:var(--rose)}
-.stage-btn.stage-easy{color:rgba(52,211,153,.5)}
-.stage-btn.stage-med{color:rgba(245,158,11,.5)}
-.stage-btn.stage-hard{color:rgba(248,113,113,.5)}
+.stage-btn.stage-easy{color:rgba(52,211,153,.9)}
+.stage-btn.stage-med{color:rgba(245,158,11,.9)}
+.stage-btn.stage-hard{color:rgba(248,113,113,.9)}
 .sim-card-btn{width:100%;padding:9px;border-radius:8px;border:none;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
 .scb-start{background:var(--accent);color:#fff}
 .scb-start:hover{background:#6a5ee8}
@@ -181,7 +206,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 #ide-page.active{display:flex}
 .ide-topbar{height:44px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;overflow-x:auto}
 .ide-sim-title{font-size:13px;font-weight:700;white-space:nowrap}
-.ide-stage-badge{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;font-family:var(--mono);white-space:nowrap}
+.ide-stage-badge{font-size:10px;padding:4px 10px;border-radius:99px;font-weight:700;font-family:var(--mono);white-space:nowrap;background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.1)}
 .ide-task-info{font-size:12px;color:var(--muted2);white-space:nowrap}
 .ide-timer{font-family:var(--mono);font-size:13px;padding:4px 12px;border-radius:6px;font-weight:500;white-space:nowrap}
 .timer-ok{background:rgba(52,211,153,.1);color:var(--accent2);border:1px solid rgba(52,211,153,.2)}
@@ -192,8 +217,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 /* VALIDATE & SUBMIT BUTTONS */
 .ide-validate-btn{padding:6px 16px;background:rgba(96,165,250,.12);color:var(--sky);border:1px solid rgba(96,165,250,.25);border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .ide-validate-btn:hover{background:rgba(96,165,250,.22)}
-.ide-submit-btn{padding:6px 16px;background:rgba(52,211,153,.12);color:var(--accent2);border:1px solid rgba(52,211,153,.25);border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.ide-submit-btn:hover{background:rgba(52,211,153,.22)}
+.ide-submit-btn{padding:6px 16px;background:rgba(52,211,153,.18);color:#064e3b;border:1px solid rgba(52,211,153,.45);border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.ide-submit-btn:hover{background:rgba(52,211,153,.3)}
 .ide-submit-btn:disabled{opacity:.4;cursor:not-allowed}
 .ide-layout{flex:1;display:grid;grid-template-columns:280px 1fr 260px 280px;overflow:hidden}
 .task-panel{background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
@@ -527,11 +552,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 
 <!-- TOPBAR -->
 <div id="topbar" style="display:none">
+  <button class="tb-back" id="back-btn" onclick="goBack()" aria-label="Go back" title="Go back to previous page" disabled>←</button>
   <button class="tb-hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu" title="Toggle sidebar">☰</button>
   <div class="tb-logo"><div class="tb-logo-sq">S</div>SimWork</div>
   <div class="tb-sep"></div>
   <div class="tb-breadcrumb" id="tb-breadcrumb">Dashboard</div>
   <div class="tb-right">
+    <button class="tb-theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     <div class="tb-score" id="tb-score">XP: 0</div>
     <div style="position:relative">
       <div class="tb-avatar" id="tb-avatar" onclick="toggleDropdown()">??</div>
@@ -645,6 +672,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
         <div class="ide-sim-title" id="ide-sim-title">Simulation</div>
         <div class="ide-stage-badge" id="ide-stage-badge"></div>
         <div class="ide-task-info" id="ide-task-info">Task 1 of 5</div>
+        <select class="form-select" id="ide-lang-select" style="width:150px;min-width:140px;" onchange="updateSelectedLanguage()" data-tooltip="Choose the coding language you know best for this simulation."></select>
+        <div class="ide-lang-note" id="ide-lang-note" style="font-size:12px;color:var(--muted2);white-space:nowrap;margin-left:8px">Language: JavaScript</div>
         <div class="ide-timer timer-ok" id="ide-timer">⏱ 45:00</div>
         <button class="ide-run-btn" data-tooltip="Run your current code in the editor to see output and check behavior." onclick="runCode()">▶ Run</button>
         <button class="ide-validate-btn" data-tooltip="Validate your solution against task requirements before submitting." onclick="validateCode()">🔍 Validate</button>
@@ -830,14 +859,89 @@ const SIMS_KEY='simwork_sims_v2';
 
 let user=null;
 let currentSim=null,currentStage='beginner',currentTaskIndex=0;
+let currentLanguage='JavaScript';
 let timerInterval=null,timerSeconds=0,taskResults={};
 let validationPassed=false;
+let currentTheme='dark';
+let currentPage='dashboard';
+let navigationStack=[];
+let isBackNavigation=false;
+
+function updateBackButtonState(){
+  const btn=document.getElementById('back-btn');
+  if(btn)btn.disabled=navigationStack.length===0;
+}
+
+function goBack(){
+  if(navigationStack.length===0){
+    showToast('No previous page to go back to.');
+    return;
+  }
+  const prevPage=navigationStack.pop();
+  isBackNavigation=true;
+  navigate(prevPage,{replace:true});
+}
+
+window.addEventListener('keydown',event=>{
+  if(event.key==='Backspace'){
+    const target=event.target;
+    const ignoreTags=['INPUT','TEXTAREA','SELECT'];
+    if(ignoreTags.includes(target.tagName) || target.isContentEditable) return;
+    event.preventDefault();
+    goBack();
+  }
+});
+
+function populateLanguageSelector(){
+  const select=document.getElementById('ide-lang-select');
+  if(!select||!currentSim)return;
+  const langs=currentSim.languages||['JavaScript'];
+  select.innerHTML=langs.map(lang=>`<option value="${lang}">${lang}</option>`).join('');
+  if(user && user.preferredLanguage && langs.includes(user.preferredLanguage)){
+    currentLanguage=user.preferredLanguage;
+  } else {
+    currentLanguage=langs[0];
+  }
+  select.value=currentLanguage;
+  if(document.getElementById('ide-lang-note')){
+    document.getElementById('ide-lang-note').textContent=`Language: ${currentLanguage}`;
+  }
+}
+
+function updateSelectedLanguage(){
+  const select=document.getElementById('ide-lang-select');
+  if(!select)return;
+  currentLanguage=select.value;
+  if(user)user.preferredLanguage=currentLanguage;
+  saveSession();
+  showToast(`Language set to ${currentLanguage}`);
+  if(document.getElementById('ide-lang-note')){
+    document.getElementById('ide-lang-note').textContent=`Language: ${currentLanguage}`;
+  }
+}
+
+function toggleTheme(){
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.body.classList.toggle('light-mode', currentTheme === 'light');
+  const toggleBtn = document.getElementById('theme-toggle');
+  toggleBtn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('simwork_theme', currentTheme);
+}
+
+function loadTheme(){
+  const saved = localStorage.getItem('simwork_theme') || 'dark';
+  currentTheme = saved;
+  document.body.classList.toggle('light-mode', currentTheme === 'light');
+  const toggleBtn = document.getElementById('theme-toggle');
+  if(toggleBtn) toggleBtn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+}
 
 const DEMO_ACCOUNT={
   pass:'demo123',fname:'Vishvajit',lname:'Gadakari',
   email:'demo@simwork.in',city:'Pune',role:'Software Developer',
   college:'Pune University',degree:'B.Tech / B.E.',branch:'Computer Science',
   gradyear:'2025',skills:['JavaScript','Node.js','React','Python'],
+  preferredLanguage:'JavaScript',
   avatarColor:'#7C6EFA',xp:0,certs:[],
   notifications:{email:true,browser:true,weekly:true},
   privacy:{publicProfile:true,showEducation:true,showOnLeaderboard:true}
@@ -1184,7 +1288,7 @@ function handleSignup(){
   if(pass.length<6){errEl.textContent='Password must be at least 6 characters';errEl.style.display='block';return;}
   errEl.style.display='none';
   const skills=skillsRaw?skillsRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
-  user={fname,lname,email,city,role,college,degree,branch,gradyear,skills,avatarColor:'#7C6EFA',xp:0,certs:[],_pass:pass,notifications:{email:true,browser:true,weekly:true},privacy:{publicProfile:true,showEducation:true,showOnLeaderboard:true}};
+  user={fname,lname,email,city,role,college,degree,branch,gradyear,skills,preferredLanguage:'JavaScript',avatarColor:'#7C6EFA',xp:0,certs:[],_pass:pass,notifications:{email:true,browser:true,weekly:true},privacy:{publicProfile:true,showEducation:true,showOnLeaderboard:true}};
   ACCOUNTS[email.toLowerCase()]={...user,pass};
   SIMULATIONS=SIMULATIONS_DEFAULT();
   launchApp(true);
@@ -1196,6 +1300,7 @@ function launchApp(isNew){
   taskResults={};currentSim=null;
   if(isNew)SIMULATIONS=SIMULATIONS_DEFAULT();
   populateUserUI();renderAll();navigate('dashboard');saveSession();
+  loadTheme();
   if(isNew)showToast('Welcome to SimWork, '+user.fname+'! 🚀');
   else showToast('Welcome back, '+user.fname+'! 👋');
 }
@@ -1256,7 +1361,13 @@ function closeSidebar(){
 }
 
 // NAVIGATION
-function navigate(page){
+function navigate(page,{replace=false}={}){
+  if(!replace && currentPage && currentPage!==page){
+    navigationStack.push(currentPage);
+  }
+  currentPage=page;
+  isBackNavigation=false;
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   document.getElementById('ide-page').style.display='none';
@@ -1265,6 +1376,7 @@ function navigate(page){
     document.getElementById('ide-page').style.flexDirection='column';
     document.getElementById('sb-ide-item').classList.add('active');
     document.getElementById('tb-breadcrumb').textContent=(currentSim?.title||'')+' → IDE';
+    updateBackButtonState();
     return;
   }
   const pg=document.getElementById('page-'+page);
@@ -1276,6 +1388,7 @@ function navigate(page){
   if(page==='settings')renderSettings('account');
   if(page==='leaderboard-page')renderFullLeaderboard();
   closeDropdown();
+  updateBackButtonState();
 }
 
 // RENDER
@@ -1363,6 +1476,7 @@ function openSimStage(id,stage,evt){
   if(!tasks[stage]||tasks[stage].length===0){showToast('🚧 Coming soon!');return;}
   currentSim=sim;currentStage=stage;currentTaskIndex=0;taskResults={};validationPassed=false;
   document.getElementById('sb-ide-item').style.display='flex';
+  populateLanguageSelector();
   // Initialize role communication
   updateRoleStatus('dev','💻 Starting task...','dev');
   updateRoleStatus('qa','Waiting for submission...','qa');
@@ -1895,6 +2009,7 @@ document.getElementById('code-editor').addEventListener('keydown',e=>{
     populateUserUI();renderAll();navigate('dashboard');
   }
 })();
+loadTheme();
 </script>
 </body>
 </html>
