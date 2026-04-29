@@ -1,16 +1,15 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SimWork — Job Simulation Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07070F;--s1:#0F0F1A;--s2:#161622;--s3:#1D1D2E;
-  --accent:#7C6EFA;--accent2:#34D399;--accent3:#F59E0B;--rose:#F87171;
+  --accent:#7C6EFA;--accent2:#34D399;--accent3:#F59E0B;--rose:#F87171;--sky:#60A5FA;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --text:#F0EDF8;--muted:#6B6880;--muted2:#A09DB8;
   --ff:'Plus Jakarta Sans',sans-serif;--mono:'Fira Code',monospace;
@@ -18,55 +17,99 @@
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;flex-direction:column}
 
-/* ── TOPBAR ── */
+/* ─── AUTH SCREENS ─── */
+#auth-screen{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;overflow:hidden}
+.auth-left{flex:1;background:linear-gradient(135deg,rgba(124,110,250,.15) 0%,rgba(52,211,153,.08) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;border-right:1px solid var(--border);position:relative;overflow:hidden}
+.auth-left::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124,110,250,.12),transparent 70%);border-radius:50%}
+.auth-left::after{content:'';position:absolute;bottom:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(52,211,153,.08),transparent 70%);border-radius:50%}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:48px;z-index:1}
+.auth-logo-sq{width:44px;height:44px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff}
+.auth-brand-name{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.auth-tagline{font-size:28px;font-weight:800;line-height:1.2;letter-spacing:-.03em;max-width:360px;margin-bottom:32px;z-index:1}
+.auth-tagline em{font-style:italic;color:var(--accent)}
+.auth-features{display:flex;flex-direction:column;gap:14px;z-index:1}
+.auth-feat{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted2)}
+.auth-feat-icon{width:32px;height:32px;border-radius:8px;background:rgba(124,110,250,.12);border:1px solid rgba(124,110,250,.2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.auth-right{width:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 56px;overflow-y:auto}
+.auth-panel{width:100%;max-width:380px}
+.auth-panel-title{font-size:24px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.auth-panel-sub{font-size:14px;color:var(--muted2);margin-bottom:32px}
+.auth-tabs{display:flex;background:var(--s2);border-radius:10px;padding:4px;margin-bottom:28px}
+.auth-tab{flex:1;padding:9px;text-align:center;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted2);transition:all .2s}
+.auth-tab.active{background:var(--accent);color:#fff}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.05em}
+.form-input{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:var(--ff);font-size:14px;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.form-select{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:var(--ff);font-size:14px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;transition:border-color .2s}
+.form-select:focus{border-color:var(--accent)}
+.form-select option{background:var(--s2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-size:11px;color:var(--muted);margin-top:5px}
+.form-error{font-size:11px;color:var(--rose);margin-top:5px;display:none}
+.form-divider{display:flex;align-items:center;gap:12px;margin:20px 0;font-size:12px;color:var(--muted)}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-submit{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:var(--ff);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.auth-submit:hover{background:#6a5ee8;transform:translateY(-1px)}
+.auth-switch{text-align:center;margin-top:20px;font-size:13px;color:var(--muted2)}
+.auth-switch a{color:var(--accent);cursor:pointer;font-weight:600}
+.section-sep{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:20px 0 14px;font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+/* ─── TOPBAR ─── */
 #topbar{height:52px;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;z-index:50}
 .tb-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;letter-spacing:-.02em}
 .tb-logo-sq{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff}
 .tb-sep{width:1px;height:24px;background:var(--border);margin:0 4px}
-.tb-breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted2)}
-.tb-breadcrumb span{color:var(--muted)}
+.tb-breadcrumb{font-size:13px;color:var(--muted2)}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .tb-score{font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);padding:4px 12px;border-radius:20px}
-.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer;position:relative}
+.tb-dropdown{position:absolute;top:40px;right:0;background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:6px;min-width:180px;z-index:200;display:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.tb-dropdown.open{display:block}
+.tb-dd-item{padding:9px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--muted2);transition:all .15s;display:flex;align-items:center;gap:8px}
+.tb-dd-item:hover{background:var(--s3);color:var(--text)}
+.tb-dd-sep{height:1px;background:var(--border);margin:4px 0}
+.tb-dd-user{padding:12px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:4px}
+.tb-dd-user strong{display:block;font-size:13px;color:var(--text);margin-bottom:2px}
 
-/* ── MAIN LAYOUT ── */
-#app{flex:1;display:flex;overflow:hidden}
-
-/* ── SIDEBAR ── */
+/* ─── SIDEBAR ─── */
 #sidebar{width:220px;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
 .sb-section{padding:12px 10px 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
-.sb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;margin:1px 6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted2);transition:all .15s;position:relative}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;margin:1px 6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted2);transition:all .15s}
 .sb-item:hover{background:var(--s2);color:var(--text)}
 .sb-item.active{background:rgba(124,110,250,.12);color:var(--accent);border:1px solid rgba(124,110,250,.2)}
 .sb-item .icon{font-size:15px;width:20px;text-align:center}
 .sb-badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px}
+.sb-user-card{margin:12px 10px;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px}
+.sb-user-name{font-size:13px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:11px;color:var(--muted2)}
 .sb-progress{padding:12px 14px;margin-top:auto;border-top:1px solid var(--border)}
 .sb-prog-label{font-size:11px;color:var(--muted);margin-bottom:6px}
 .sb-prog-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
 .sb-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease}
 .sb-prog-stat{font-size:11px;color:var(--muted2);margin-top:6px;font-family:var(--mono)}
 
-/* ── CONTENT AREA ── */
+/* ─── PAGES ─── */
 #content{flex:1;overflow:hidden;display:flex;flex-direction:column}
-
-/* ── PAGES ── */
 .page{display:none;flex:1;overflow-y:auto;padding:28px 32px}
 .page.active{display:flex;flex-direction:column}
 
-/* ── DASHBOARD ── */
-.dash-welcome{margin-bottom:28px}
-.dash-welcome h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+/* ─── DASHBOARD ─── */
+.dash-welcome{margin-bottom:28px;padding:24px 28px;background:linear-gradient(135deg,rgba(124,110,250,.1),rgba(52,211,153,.06));border:1px solid rgba(124,110,250,.15);border-radius:16px}
+.dash-welcome h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
 .dash-welcome p{font-size:14px;color:var(--muted2)}
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px 20px;transition:border-color .2s}
+.stat-card:hover{border-color:var(--border2)}
 .stat-card-num{font-size:28px;font-weight:800;letter-spacing:-.03em;margin-bottom:2px}
 .stat-card-label{font-size:12px;color:var(--muted2)}
 .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .dash-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px;overflow:hidden}
-.dash-card-title{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.sim-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .15s}
+.dash-card-title{font-size:14px;font-weight:700;margin-bottom:16px}
+.sim-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
 .sim-row:last-child{border-bottom:none}
-.sim-row:hover{opacity:.85}
+.sim-row:hover{opacity:.8}
 .sim-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .sim-info{flex:1}
 .sim-name{font-size:13px;font-weight:600;margin-bottom:2px}
@@ -87,7 +130,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .lb-name{flex:1;font-size:13px;font-weight:500}
 .lb-score{font-family:var(--mono);font-size:12px;color:var(--accent2)}
 
-/* ── SIMULATIONS PAGE ── */
+/* ─── SIMULATIONS ─── */
 .sims-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .sims-header h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
 .filter-tabs{display:flex;gap:6px}
@@ -113,11 +156,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .scb-continue{background:rgba(124,110,250,.15);color:var(--accent);border:1px solid rgba(124,110,250,.3)}
 .scb-done{background:rgba(52,211,153,.1);color:var(--accent2);cursor:default;border:1px solid rgba(52,211,153,.2)}
 
-/* ── IDE PAGE ── */
+/* ─── IDE ─── */
 #ide-page{display:none;flex:1;overflow:hidden;flex-direction:column}
 #ide-page.active{display:flex}
 .ide-topbar{height:44px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
-.ide-sim-title{font-size:13px;font-weight:700;color:var(--text)}
+.ide-sim-title{font-size:13px;font-weight:700}
 .ide-task-info{font-size:12px;color:var(--muted2)}
 .ide-timer{font-family:var(--mono);font-size:13px;padding:4px 12px;border-radius:6px;font-weight:500}
 .timer-ok{background:rgba(52,211,153,.1);color:var(--accent2);border:1px solid rgba(52,211,153,.2)}
@@ -128,11 +171,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .ide-submit-btn{padding:6px 16px;background:rgba(52,211,153,.12);color:var(--accent2);border:1px solid rgba(52,211,153,.25);border-radius:7px;font-family:var(--ff);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
 .ide-submit-btn:hover{background:rgba(52,211,153,.22)}
 .ide-layout{flex:1;display:grid;grid-template-columns:280px 1fr 260px;overflow:hidden}
-
-/* Task panel */
 .task-panel{background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
-.task-header{padding:16px;border-bottom:1px solid var(--border)}
-.task-steps{padding:12px}
+.task-header{padding:14px;border-bottom:1px solid var(--border)}
 .task-step{padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s;border:1px solid transparent}
 .task-step:hover{background:var(--s2)}
 .task-step.ts-active{background:rgba(124,110,250,.1);border-color:rgba(124,110,250,.25)}
@@ -140,23 +180,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .ts-num{font-size:10px;font-family:var(--mono);color:var(--muted);margin-bottom:3px}
 .ts-title{font-size:12px;font-weight:600;margin-bottom:2px}
 .ts-time{font-size:11px;color:var(--muted2)}
-.task-desc{padding:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted2);line-height:1.7;flex:1;overflow-y:auto}
+.task-desc{padding:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted2);line-height:1.7;flex:1;overflow-y:auto}
 .task-desc h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px}
 .task-desc p{margin-bottom:10px}
 .task-desc code{font-family:var(--mono);font-size:11px;background:var(--s3);padding:1px 5px;border-radius:3px;color:var(--accent)}
 .task-desc ul{margin:8px 0 10px 16px;display:flex;flex-direction:column;gap:4px}
 .task-desc li{font-size:12px;color:var(--muted2)}
-
-/* Code editor */
 .editor-area{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
 .editor-tabs{height:36px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:flex-end;padding:0 12px;gap:2px;flex-shrink:0}
 .etab{padding:6px 14px;font-size:12px;color:var(--muted2);cursor:pointer;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;font-family:var(--ff)}
 .etab.active{background:var(--bg);color:var(--text);border-color:var(--border);font-weight:600}
 .editor-wrap{flex:1;overflow:hidden;position:relative}
-#code-editor{width:100%;height:100%;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:13px;color:#C9D1D9;padding:16px;resize:none;line-height:1.7;tab-size:2}
-.line-nums{position:absolute;left:0;top:0;bottom:0;width:40px;background:var(--s1);padding:16px 0;display:flex;flex-direction:column;align-items:flex-end;padding-right:10px;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.7;pointer-events:none;border-right:1px solid var(--border);overflow:hidden}
-
-/* Output panel */
+#code-editor{width:100%;height:100%;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:13px;color:#C9D1D9;padding:16px;resize:none;line-height:1.7;tab-size:2;padding-left:52px}
+.line-nums{position:absolute;left:0;top:0;bottom:0;width:40px;background:var(--s1);padding:16px 10px 16px 0;display:flex;flex-direction:column;align-items:flex-end;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.7;pointer-events:none;border-right:1px solid var(--border);overflow:hidden}
 .output-panel{background:var(--s1);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .op-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
 .optab{flex:1;padding:10px 6px;font-size:11px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);transition:all .15s;border-bottom:2px solid transparent}
@@ -164,25 +200,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .op-content{flex:1;overflow-y:auto}
 .console-area{padding:12px;font-family:var(--mono);font-size:12px;line-height:1.7}
 .console-line{margin-bottom:2px;display:flex;gap:8px}
-.cl-prompt{color:var(--muted)}
-.cl-ok{color:var(--accent2)}
-.cl-err{color:var(--rose)}
-.cl-info{color:var(--accent)}
-.cl-warn{color:var(--accent3)}
+.cl-ok{color:var(--accent2)}.cl-err{color:var(--rose)}.cl-info{color:var(--accent)}.cl-warn{color:var(--accent3)}.cl-muted{color:var(--muted)}
 .tests-area{padding:12px}
 .test-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:6px;font-size:12px;border:1px solid var(--border)}
 .test-pass{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.2)}
 .test-fail{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.2)}
 .test-pending{background:var(--s2)}
-.test-icon{font-size:14px;flex-shrink:0}
 .test-name{flex:1;color:var(--muted2)}
 .test-ms{font-family:var(--mono);font-size:10px;color:var(--muted)}
 .score-area{padding:16px}
-.score-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:16px 0}
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:12px 0}
 .score-ring{width:100px;height:100px;position:relative}
 .score-ring svg{transform:rotate(-90deg)}
 .score-ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-ring-n{font-size:22px;font-weight:800;color:var(--text)}
+.score-ring-n{font-size:22px;font-weight:800}
 .score-ring-l{font-size:10px;color:var(--muted)}
 .score-breakdown{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 .sb-row{display:flex;align-items:center;gap:8px;font-size:11px}
@@ -194,14 +225,87 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .hint-item{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted2);line-height:1.5;cursor:pointer}
 .hint-item strong{color:var(--accent3)}
 
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center}
+/* ─── PROFILE ─── */
+.profile-header{display:flex;gap:24px;align-items:flex-start;margin-bottom:24px;padding:28px;background:var(--s1);border:1px solid var(--border);border-radius:16px}
+.profile-avatar-big{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;flex-shrink:0;border:3px solid rgba(124,110,250,.3)}
+.profile-info h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.profile-info .profile-email{font-size:13px;color:var(--muted2);margin-bottom:6px;font-family:var(--mono)}
+.profile-info .profile-location{font-size:13px;color:var(--muted2);margin-bottom:12px}
+.profile-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ptag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(124,110,250,.12);border:1px solid rgba(124,110,250,.2);color:var(--accent)}
+.ptag-edu{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.2);color:var(--sky)}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.pstat{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.pstat-num{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--accent)}
+.pstat-label{font-size:11px;color:var(--muted2);margin-top:4px}
+.profile-section-title{font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.edu-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start}
+.edu-icon{width:40px;height:40px;border-radius:10px;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.edu-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.edu-sub{font-size:12px;color:var(--muted2);margin-bottom:4px}
+.edu-year{font-size:11px;color:var(--accent3);font-family:var(--mono)}
+.certs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cert-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.cert-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cert-card-icon{font-size:28px;margin-bottom:12px}
+.cert-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.cert-card-date{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:10px}
+.cert-score-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+
+/* ─── SETTINGS ─── */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;gap:24px}
+.settings-nav{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:8px;height:fit-content}
+.settings-nav-item{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted2);transition:all .15s;display:flex;align-items:center;gap:8px}
+.settings-nav-item:hover{background:var(--s2);color:var(--text)}
+.settings-nav-item.active{background:rgba(124,110,250,.12);color:var(--accent)}
+.settings-panel{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:28px}
+.settings-title{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.settings-sub{font-size:13px;color:var(--muted2);margin-bottom:28px}
+.settings-section{margin-bottom:32px}
+.settings-section-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-row-label{font-size:14px;font-weight:600;margin-bottom:3px}
+.settings-row-desc{font-size:12px;color:var(--muted2)}
+.toggle{width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--accent)}
+.toggle.off{background:var(--s3)}
+.toggle::after{content:'';position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s}
+.toggle.on::after{left:23px}
+.toggle.off::after{left:3px}
+.settings-input{background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--ff);font-size:14px;outline:none;width:220px;transition:border-color .2s}
+.settings-input:focus{border-color:var(--accent)}
+.settings-select{background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--ff);font-size:13px;outline:none;width:180px;cursor:pointer}
+.settings-save-btn{padding:10px 28px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--ff);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
+.settings-save-btn:hover{background:#6a5ee8}
+.settings-danger-btn{padding:10px 20px;background:rgba(248,113,113,.1);color:var(--rose);border:1px solid rgba(248,113,113,.2);border-radius:8px;font-family:var(--ff);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.settings-danger-btn:hover{background:rgba(248,113,113,.2)}
+.avatar-picker{display:flex;align-items:center;gap:16px}
+.avatar-preview{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:2px solid rgba(124,110,250,.3)}
+.color-swatches{display:flex;gap:8px}
+.swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.swatch.selected{border-color:#fff;transform:scale(1.15)}
+
+/* ─── LEADERBOARD ─── */
+.lb-table{background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.lb-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);transition:background .15s}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:var(--s2)}
+.lb-row.me{background:rgba(124,110,250,.06)}
+.lb-rank-num{font-family:var(--mono);font-size:14px;font-weight:700;width:36px;color:var(--muted)}
+.lb-full-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.lb-full-name{flex:1;font-size:14px;font-weight:500}
+.lb-full-score{font-family:var(--mono);font-size:13px;color:var(--accent2)}
+.lb-full-sims{font-size:12px;color:var(--muted);width:80px;text-align:right}
+
+/* ─── MODAL ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:var(--s2);border:1px solid var(--border2);border-radius:20px;padding:40px;max-width:500px;width:90%;text-align:center;animation:popIn .3s ease}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 .modal-icon{font-size:52px;margin-bottom:16px}
 .modal-title{font-size:24px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
-.modal-sub{font-size:14px;color:var(--muted2);line-height:1.6;margin-bottom:28px}
+.modal-sub{font-size:14px;color:var(--muted2);line-height:1.6;margin-bottom:24px}
 .modal-score{font-size:56px;font-weight:900;color:var(--accent2);letter-spacing:-.04em;margin:8px 0}
 .modal-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .mbtn{padding:12px 28px;border-radius:10px;font-family:var(--ff);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
@@ -214,94 +318,188 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
 .cert-name{font-size:18px;font-weight:800;margin-bottom:4px}
 .cert-role{font-size:13px;color:var(--muted2)}
 
-/* ── PROFILE PAGE ── */
-.profile-header{display:flex;gap:24px;align-items:flex-start;margin-bottom:28px;padding:24px;background:var(--s1);border:1px solid var(--border);border-radius:16px}
-.profile-avatar{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;flex-shrink:0}
-.profile-info h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
-.profile-info p{font-size:13px;color:var(--muted2);margin-bottom:12px}
-.profile-tags{display:flex;gap:8px;flex-wrap:wrap}
-.ptag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(124,110,250,.12);border:1px solid rgba(124,110,250,.2);color:var(--accent)}
-.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
-.pstat{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
-.pstat-num{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--accent)}
-.pstat-label{font-size:11px;color:var(--muted2);margin-top:4px}
-.certs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.cert-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
-.cert-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.cert-card-icon{font-size:28px;margin-bottom:12px}
-.cert-card-title{font-size:14px;font-weight:700;margin-bottom:4px}
-.cert-card-date{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:10px}
-.cert-card-score{display:flex;align-items:center;gap:8px}
-.cert-score-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
-
-/* ── WELCOME SCREEN ── */
-#welcome-screen{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
-.ws-logo{font-size:48px;margin-bottom:8px}
-.ws-title{font-size:32px;font-weight:800;letter-spacing:-.03em}
-.ws-sub{font-size:15px;color:var(--muted2);margin-bottom:24px}
-.ws-form{display:flex;flex-direction:column;gap:12px;width:320px}
-.ws-input{background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;color:var(--text);font-family:var(--ff);font-size:15px;outline:none;transition:border-color .15s}
-.ws-input:focus{border-color:var(--accent)}
-.ws-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-family:var(--ff);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
-.ws-btn:hover{background:#6a5ee8}
-
 /* scrollbar */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
 
-/* color helpers */
-.c-purple{color:var(--accent)} .c-green{color:var(--accent2)} .c-amber{color:var(--accent3)} .c-rose{color:var(--rose)}
-.bg-purple{background:rgba(124,110,250,.15)}
-.bg-green{background:rgba(52,211,153,.12)}
-.bg-amber{background:rgba(245,158,11,.12)}
-.bg-rose{background:rgba(248,113,113,.12)}
+/* toast */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;z-index:600;transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px}
+
+.c-purple{color:var(--accent)}.c-green{color:var(--accent2)}.c-amber{color:var(--accent3)}.c-rose{color:var(--rose)}.c-sky{color:var(--sky)}
 </style>
 </head>
 <body>
 
-<!-- WELCOME -->
-<div id="welcome-screen">
-  <div class="ws-logo">🚀</div>
-  <div class="ws-title">Welcome to SimWork</div>
-  <div class="ws-sub">India's #1 Job Simulation Platform for Freshers</div>
-  <div class="ws-form">
-    <input class="ws-input" id="ws-name" placeholder="Your full name" value="Vishvajit Gadakari">
-    <input class="ws-input" id="ws-role" placeholder="Your target role (e.g. Software Dev)">
-    <button class="ws-btn" onclick="startApp()">Start Simulating →</button>
+<!-- ═══════════════ AUTH SCREEN ═══════════════ -->
+<div id="auth-screen">
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-logo-sq">S</div>
+      <div class="auth-brand-name">SimWork</div>
+    </div>
+    <div class="auth-tagline">Simulate before<br>you <em>apply.</em></div>
+    <div class="auth-features">
+      <div class="auth-feat"><div class="auth-feat-icon">💻</div>Real job simulations in an in-browser IDE</div>
+      <div class="auth-feat"><div class="auth-feat-icon">🏅</div>Verified certificates recruiters trust</div>
+      <div class="auth-feat"><div class="auth-feat-icon">📊</div>Public portfolio to showcase your work</div>
+      <div class="auth-feat"><div class="auth-feat-icon">🎯</div>Get discovered by top companies</div>
+    </div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-panel">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</div>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="login-form">
+        <div class="auth-panel-title">Welcome back 👋</div>
+        <div class="auth-panel-sub">Sign in to continue your simulation journey</div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="login-email" type="email" placeholder="you@example.com">
+          <div class="form-error" id="login-email-err">Please enter a valid email</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="login-password" type="password" placeholder="Your password">
+          <div class="form-error" id="login-pass-err">Password must be at least 6 characters</div>
+        </div>
+        <div style="text-align:right;margin-bottom:4px"><span style="font-size:12px;color:var(--accent);cursor:pointer" onclick="showToast('Password reset coming soon!')">Forgot password?</span></div>
+        <button class="auth-submit" onclick="handleLogin()">Sign In →</button>
+        <div class="form-divider">or</div>
+        <button class="auth-submit" style="background:var(--s2);color:var(--muted2);border:1px solid var(--border2)" onclick="demoLogin()">🚀 Try Demo Account</button>
+        <div class="auth-switch">Don't have an account? <a onclick="switchAuthTab('signup')">Sign Up</a></div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div id="signup-form" style="display:none">
+        <div class="auth-panel-title">Create account ✨</div>
+        <div class="auth-panel-sub">Join thousands of freshers building job-ready skills</div>
+
+        <div class="section-sep">Personal Info</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" id="su-fname" type="text" placeholder="Vishvajit">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" id="su-lname" type="text" placeholder="Gadakari">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" id="su-email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="su-password" type="password" placeholder="Min. 6 characters">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input class="form-input" id="su-city" type="text" placeholder="Pune">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Role</label>
+            <select class="form-select" id="su-role">
+              <option value="">Select role...</option>
+              <option>Software Developer</option>
+              <option>Data Scientist</option>
+              <option>Finance Analyst</option>
+              <option>UI/UX Designer</option>
+              <option>DevOps Engineer</option>
+              <option>Product Manager</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-sep">Education</div>
+        <div class="form-group">
+          <label class="form-label">College / University</label>
+          <input class="form-input" id="su-college" type="text" placeholder="e.g. Pune University">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Degree</label>
+          <select class="form-select" id="su-degree" style="width:100%">
+            <option value="">Select degree...</option>
+            <option>B.Tech / B.E.</option>
+            <option>B.Sc</option>
+            <option>BCA</option>
+            <option>MCA</option>
+            <option>M.Tech</option>
+            <option>MBA</option>
+            <option>B.Com</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Branch / Major</label>
+            <input class="form-input" id="su-branch" type="text" placeholder="e.g. Computer Science">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Graduation Year</label>
+            <select class="form-select" id="su-gradyear">
+              <option value="">Year...</option>
+              <option>2024</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Skills (comma separated)</label>
+          <input class="form-input" id="su-skills" type="text" placeholder="JavaScript, Python, SQL">
+          <div class="form-hint">These appear on your public profile</div>
+        </div>
+        <div class="form-error" id="su-err" style="margin-bottom:8px;font-size:13px"></div>
+        <button class="auth-submit" onclick="handleSignup()">Create Account →</button>
+        <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('login')">Sign In</a></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- TOPBAR -->
-<div id="topbar">
+<!-- ═══════════════ TOPBAR ═══════════════ -->
+<div id="topbar" style="display:none">
   <div class="tb-logo"><div class="tb-logo-sq">S</div>SimWork</div>
   <div class="tb-sep"></div>
   <div class="tb-breadcrumb" id="tb-breadcrumb">Dashboard</div>
   <div class="tb-right">
     <div class="tb-score" id="tb-score">XP: 0</div>
-    <div class="tb-avatar" id="tb-avatar">VG</div>
+    <div style="position:relative">
+      <div class="tb-avatar" id="tb-avatar" onclick="toggleDropdown()">VG</div>
+      <div class="tb-dropdown" id="tb-dropdown">
+        <div class="tb-dd-user"><strong id="dd-name">Vishvajit</strong><span id="dd-email">user@simwork.in</span></div>
+        <div class="tb-dd-item" onclick="navigate('profile');toggleDropdown()">👤 My Profile</div>
+        <div class="tb-dd-item" onclick="navigate('settings');toggleDropdown()">⚙️ Settings</div>
+        <div class="tb-dd-sep"></div>
+        <div class="tb-dd-item" style="color:var(--rose)" onclick="logout()">🚪 Sign Out</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app">
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app" style="display:none">
   <!-- SIDEBAR -->
   <div id="sidebar">
+    <div class="sb-user-card">
+      <div class="sb-user-name" id="sb-username">Vishvajit</div>
+      <div class="sb-user-role" id="sb-userrole">Software Developer</div>
+    </div>
     <div class="sb-section">Main</div>
     <div class="sb-item active" onclick="navigate('dashboard')"><span class="icon">🏠</span>Dashboard</div>
-    <div class="sb-item" onclick="navigate('simulations')"><span class="icon">🎯</span>Simulations<span class="sb-badge" id="sb-new-badge">3</span></div>
+    <div class="sb-item" onclick="navigate('simulations')"><span class="icon">🎯</span>Simulations<span class="sb-badge">3</span></div>
     <div class="sb-item" onclick="navigate('profile')"><span class="icon">👤</span>My Profile</div>
     <div class="sb-item" onclick="navigate('leaderboard-page')"><span class="icon">🏆</span>Leaderboard</div>
-
     <div class="sb-section">Active Sim</div>
     <div class="sb-item" id="sb-ide-item" onclick="navigate('ide')" style="display:none"><span class="icon">💻</span>IDE &amp; Tasks</div>
-
-    <div class="sb-section">Resources</div>
-    <div class="sb-item" onclick="showToast('Coming soon!')"><span class="icon">📚</span>Docs</div>
-    <div class="sb-item" onclick="showToast('Community launching soon!')"><span class="icon">💬</span>Community</div>
     <div class="sb-section">Account</div>
-    <div class="sb-item" onclick="showToast('Settings coming soon!')"><span class="icon">⚙️</span>Settings</div>
-
+    <div class="sb-item" onclick="navigate('settings')"><span class="icon">⚙️</span>Settings</div>
+    <div class="sb-item" style="color:var(--rose)" onclick="logout()"><span class="icon">🚪</span>Sign Out</div>
     <div class="sb-progress">
       <div class="sb-prog-label">Overall Progress</div>
       <div class="sb-prog-bar"><div class="sb-prog-fill" id="sb-prog-fill" style="width:0%"></div></div>
@@ -315,8 +513,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="dash-welcome">
-        <h1 id="dash-greeting">Welcome back, Vishvajit 👋</h1>
-        <p>You have 1 active simulation. Keep going!</p>
+        <h1 id="dash-greeting">Welcome back 👋</h1>
+        <p id="dash-sub">You have 1 active simulation. Keep going!</p>
       </div>
       <div class="dash-stats">
         <div class="stat-card"><div class="stat-card-num c-purple" id="ds-xp">0</div><div class="stat-card-label">Total XP Earned</div></div>
@@ -325,24 +523,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
         <div class="stat-card"><div class="stat-card-num c-rose" id="ds-rank">#42</div><div class="stat-card-label">Leaderboard Rank</div></div>
       </div>
       <div class="dash-grid">
-        <div class="dash-card">
-          <div class="dash-card-title">🎯 Your Simulations</div>
-          <div id="dash-sim-list"></div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-title">📊 Recent Activity</div>
-          <div id="dash-activity"></div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-title">🏆 Top Performers</div>
-          <div id="dash-leaderboard"></div>
-        </div>
+        <div class="dash-card"><div class="dash-card-title">🎯 Your Simulations</div><div id="dash-sim-list"></div></div>
+        <div class="dash-card"><div class="dash-card-title">📊 Recent Activity</div><div id="dash-activity"></div></div>
+        <div class="dash-card"><div class="dash-card-title">🏆 Top Performers</div><div id="dash-leaderboard"></div></div>
         <div class="dash-card">
           <div class="dash-card-title">💡 Quick Tips</div>
-          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+          <div style="display:flex;flex-direction:column;gap:10px">
             <div style="background:rgba(124,110,250,.08);border:1px solid rgba(124,110,250,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent)">Read the task brief</strong> carefully before starting. Understanding requirements = higher scores.</div>
             <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent2)">Run tests frequently.</strong> Don't wait until submission. Each run gives you feedback.</div>
-            <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent3)">Check hints</strong> if stuck. Each hint costs 5 XP but saves time and stress.</div>
+            <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.15);border-radius:8px;padding:12px;font-size:12px;color:var(--muted2);line-height:1.6"><strong style="color:var(--accent3)">Use hints wisely.</strong> Each hint costs 5 XP but saves time.</div>
           </div>
         </div>
       </div>
@@ -363,7 +552,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
     </div>
 
     <!-- IDE PAGE -->
-    <div id="ide-page" class="page" id="page-ide">
+    <div id="ide-page">
       <div class="ide-topbar">
         <div class="ide-sim-title" id="ide-sim-title">Software Dev Simulation</div>
         <div class="ide-task-info" id="ide-task-info">Task 1 of 5</div>
@@ -372,26 +561,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
         <button class="ide-submit-btn" onclick="submitTask()">Submit Task</button>
       </div>
       <div class="ide-layout">
-        <!-- Task panel -->
         <div class="task-panel">
-          <div class="task-header">
-            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:6px">TASKS</div>
-            <div id="task-steps-list"></div>
-          </div>
+          <div class="task-header" id="task-steps-list"></div>
           <div class="task-desc" id="task-description"></div>
         </div>
-        <!-- Editor -->
         <div class="editor-area">
-          <div class="editor-tabs">
-            <div class="etab active">solution.js</div>
-            <div class="etab" onclick="showToast('Read-only reference file')">utils.js</div>
-          </div>
+          <div class="editor-tabs"><div class="etab active">solution.js</div><div class="etab" onclick="showToast('Read-only reference file')">utils.js</div></div>
           <div class="editor-wrap">
             <div class="line-nums" id="line-nums"></div>
-            <textarea id="code-editor" style="padding-left:52px" spellcheck="false" oninput="updateLineNums()"></textarea>
+            <textarea id="code-editor" spellcheck="false" oninput="updateLineNums()"></textarea>
           </div>
         </div>
-        <!-- Output -->
         <div class="output-panel">
           <div class="op-tabs">
             <div class="optab active" onclick="switchOpTab('console',this)">Console</div>
@@ -412,51 +592,66 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
     <!-- PROFILE PAGE -->
     <div class="page" id="page-profile">
       <div class="profile-header">
-        <div class="profile-avatar" id="p-avatar">VG</div>
-        <div class="profile-info">
+        <div class="profile-avatar-big" id="p-avatar-big" style="background:rgba(124,110,250,.2);color:var(--accent)">VG</div>
+        <div class="profile-info" style="flex:1">
           <h2 id="p-name">Vishvajit Gadakari</h2>
-          <p id="p-role">Aspiring Software Developer · Pune, India</p>
-          <div class="profile-tags" id="p-tags">
-            <span class="ptag">JavaScript</span>
-            <span class="ptag">Node.js</span>
-            <span class="ptag">React</span>
-          </div>
+          <div class="profile-email" id="p-email">user@example.com</div>
+          <div class="profile-location" id="p-location">📍 Pune, India</div>
+          <div class="profile-tags" id="p-tags"></div>
         </div>
-        <button class="mbtn mbtn-primary" style="margin-left:auto" onclick="showToast('Profile share link copied!')">Share Profile 🔗</button>
+        <button class="mbtn mbtn-primary" onclick="showToast('Profile link copied! 🔗')">Share Profile</button>
       </div>
       <div class="profile-stats">
         <div class="pstat"><div class="pstat-num" id="p-xp">0</div><div class="pstat-label">Total XP</div></div>
         <div class="pstat"><div class="pstat-num" id="p-sims">0</div><div class="pstat-label">Sims Done</div></div>
         <div class="pstat"><div class="pstat-num" id="p-certs-count">0</div><div class="pstat-label">Certificates</div></div>
+        <div class="pstat"><div class="pstat-num" id="p-rank">#42</div><div class="pstat-label">Rank</div></div>
       </div>
-      <div style="font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em">🏅 Certificates Earned</div>
-      <div class="certs-grid" id="certs-grid"></div>
+
+      <!-- Education -->
+      <div class="profile-section-title">🎓 Education</div>
+      <div id="p-education"></div>
+
+      <!-- Certificates -->
+      <div class="profile-section-title" style="margin-top:24px">🏅 Certificates Earned</div>
+      <div class="certs-grid" id="p-certs-grid"></div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div style="margin-bottom:24px"><h1 style="font-size:22px;font-weight:800;letter-spacing:-.02em">⚙️ Settings</h1></div>
+      <div class="settings-layout">
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="switchSettingsTab('account',this)">👤 Account</div>
+          <div class="settings-nav-item" onclick="switchSettingsTab('profile-edit',this)">✏️ Edit Profile</div>
+          <div class="settings-nav-item" onclick="switchSettingsTab('education',this)">🎓 Education</div>
+          <div class="settings-nav-item" onclick="switchSettingsTab('notifications',this)">🔔 Notifications</div>
+          <div class="settings-nav-item" onclick="switchSettingsTab('privacy',this)">🔒 Privacy</div>
+          <div class="settings-nav-item" onclick="switchSettingsTab('danger',this)" style="color:var(--rose)">⚠️ Danger Zone</div>
+        </div>
+        <div class="settings-panel" id="settings-panel"><!-- filled by JS --></div>
+      </div>
     </div>
 
     <!-- LEADERBOARD PAGE -->
     <div class="page" id="page-leaderboard-page">
-      <div style="margin-bottom:24px"><h1 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px">🏆 Leaderboard</h1><p style="font-size:14px;color:var(--muted2)">Top performers across all simulations this month</p></div>
-      <div style="background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden" id="full-leaderboard"></div>
+      <div style="margin-bottom:24px"><h1 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px">🏆 Leaderboard</h1><p style="font-size:14px;color:var(--muted2)">Top performers this month</p></div>
+      <div class="lb-table" id="full-leaderboard"></div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /content -->
+</div><!-- /app -->
 
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-complete">
   <div class="modal">
     <div class="modal-icon">🎉</div>
     <div class="modal-title">Task Complete!</div>
-    <div class="modal-sub">Excellent work. You passed all tests and scored:</div>
+    <div class="modal-sub">Excellent work! Your score:</div>
     <div class="modal-score" id="modal-score">92</div>
-    <div class="cert-preview" id="modal-cert" style="display:none">
-      <div class="cert-id" id="cert-id-text">CERT-SW-2025-0001</div>
-      <div class="cert-name" id="cert-name-text">Certificate of Completion</div>
-      <div class="cert-role" id="cert-role-text">Software Developer Simulation</div>
-    </div>
     <div class="modal-actions">
-      <button class="mbtn mbtn-primary" id="modal-next-btn" onclick="nextTask()">Next Task →</button>
-      <button class="mbtn mbtn-ghost" onclick="closeModal()">Stay Here</button>
+      <button class="mbtn mbtn-primary" onclick="nextTask()">Next Task →</button>
+      <button class="mbtn mbtn-ghost" onclick="closeModal('modal-complete')">Stay Here</button>
     </div>
   </div>
 </div>
@@ -465,608 +660,697 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);display:flex;f
   <div class="modal">
     <div class="modal-icon">🏆</div>
     <div class="modal-title">Simulation Complete!</div>
-    <div class="modal-sub">You've completed the entire simulation. Here's your final certificate:</div>
+    <div class="modal-sub">Amazing! Here's your certificate:</div>
     <div class="cert-preview">
       <div class="cert-id" id="sc-cert-id">CERT-SW-2025-0001</div>
       <div class="cert-name" id="sc-cert-name">Vishvajit Gadakari</div>
       <div class="cert-role" id="sc-cert-role">has completed the Software Developer Simulation</div>
-      <div style="margin-top:10px;font-size:12px;color:var(--accent2)">Score: <strong id="sc-score">0</strong>/100 · Issued: <span id="sc-date"></span></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--accent2)">Score: <strong id="sc-score">0</strong>/100 · <span id="sc-date"></span></div>
     </div>
     <div class="modal-actions">
       <button class="mbtn mbtn-primary" onclick="downloadCert()">Download Certificate 📄</button>
-      <button class="mbtn mbtn-ghost" onclick="closeSimModal();navigate('simulations')">Back to Simulations</button>
+      <button class="mbtn mbtn-ghost" onclick="closeModal('modal-sim-complete');navigate('simulations')">Back to Sims</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;z-index:500;transform:translateY(80px);opacity:0;transition:all .3s"></div>
+<div id="toast"></div>
 
 <script>
-// ── STATE ──
-let user = { name: 'Vishvajit Gadakari', role: 'Software Developer', xp: 0, certs: [] };
-let currentSim = null;
-let currentTaskIndex = 0;
-let timerInterval = null;
-let timerSeconds = 0;
-let taskResults = {};
-let hintsUsed = 0;
+// ═══════════════ STATE ═══════════════
+let user = {
+  fname:'', lname:'', email:'', city:'Pune',
+  role:'Software Developer',
+  college:'', degree:'', branch:'', gradyear:'',
+  skills:[], avatarColor:'#7C6EFA',
+  xp:0, certs:[], loginTime: new Date(),
+  notifications:{email:true, browser:true, weekly:true},
+  privacy:{publicProfile:true, showEducation:true, showOnLeaderboard:true}
+};
 
+// Demo accounts
+const ACCOUNTS = {
+  'demo@simwork.in': { pass:'demo123', fname:'Vishvajit', lname:'Gadakari', email:'demo@simwork.in', city:'Pune', role:'Software Developer', college:'Pune University', degree:'B.Tech / B.E.', branch:'Computer Science', gradyear:'2025', skills:['JavaScript','Node.js','React','Python'], avatarColor:'#7C6EFA', xp:0, certs:[], notifications:{email:true,browser:true,weekly:true}, privacy:{publicProfile:true,showEducation:true,showOnLeaderboard:true} }
+};
+
+let currentSim=null, currentTaskIndex=0, timerInterval=null, timerSeconds=0, taskResults={};
+
+// ═══════════════ SIMULATIONS DATA ═══════════════
 const SIMULATIONS = [
-  {
-    id: 'sw',
-    title: 'Software Developer',
-    icon: '💻',
-    color: '#7C6EFA',
-    bgClass: 'bg-purple',
-    difficulty: 'Intermediate',
-    diffClass: 'diff-med',
-    desc: 'Build REST APIs, debug code, and work with databases — just like a junior dev at a real company.',
-    duration: '3 hours',
-    tasks: 5,
-    xp: 500,
-    status: 'active',
-    progress: 0,
-    tasks_data: [
-      {
-        title: 'Hello World API',
-        time: '20 min',
-        desc: `<h3>Task 1: Create a Hello World Endpoint</h3><p>Your first task is to set up a basic Express.js server and create a <code>GET /hello</code> endpoint that returns a JSON response.</p><p>Requirements:</p><ul><li>Return status code 200</li><li>Return JSON: <code>{ message: "Hello, SimWork!" }</code></li><li>Include a <code>timestamp</code> field with the current ISO date</li></ul>`,
-        starterCode: `// Task 1: Hello World API\nconst express = require('express');\nconst app = express();\n\n// TODO: Create GET /hello endpoint\n// Should return: { message: "Hello, SimWork!", timestamp: "..." }\n\napp.get('/hello', (req, res) => {\n  // Your code here\n  \n});\n\napp.listen(3000, () => console.log('Server running on port 3000'));\n\nmodule.exports = app;`,
-        solution: `app.get('/hello', (req, res) => {\n  res.status(200).json({\n    message: "Hello, SimWork!",\n    timestamp: new Date().toISOString()\n  });\n});`,
-        tests: ['GET /hello returns 200','Response has message field','Response has timestamp field','message equals "Hello, SimWork!"','Content-Type is application/json']
-      },
-      {
-        title: 'User CRUD API',
-        time: '35 min',
-        desc: `<h3>Task 2: Build a User CRUD API</h3><p>Implement full Create, Read, Update, Delete operations for a users resource.</p><p>Endpoints required:</p><ul><li><code>GET /users</code> — list all users</li><li><code>GET /users/:id</code> — get single user</li><li><code>POST /users</code> — create user</li><li><code>PUT /users/:id</code> — update user</li><li><code>DELETE /users/:id</code> — delete user</li></ul>`,
-        starterCode: `// Task 2: User CRUD API\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nlet users = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\nlet nextId = 3;\n\n// TODO: Implement all 5 CRUD endpoints\n\nmodule.exports = app;`,
-        solution: `app.get('/users', (req, res) => res.json(users));\napp.get('/users/:id', (req, res) => {\n  const user = users.find(u => u.id === +req.params.id);\n  user ? res.json(user) : res.status(404).json({ error: 'Not found' });\n});\napp.post('/users', (req, res) => {\n  const user = { id: nextId++, ...req.body };\n  users.push(user);\n  res.status(201).json(user);\n});\napp.put('/users/:id', (req, res) => {\n  const idx = users.findIndex(u => u.id === +req.params.id);\n  if(idx === -1) return res.status(404).json({ error: 'Not found' });\n  users[idx] = { ...users[idx], ...req.body };\n  res.json(users[idx]);\n});\napp.delete('/users/:id', (req, res) => {\n  users = users.filter(u => u.id !== +req.params.id);\n  res.json({ success: true });\n});`,
-        tests: ['GET /users returns array','GET /users/:id returns user','POST /users creates user','PUT /users/:id updates user','DELETE /users/:id removes user']
-      },
-      {
-        title: 'Authentication Middleware',
-        time: '40 min',
-        desc: `<h3>Task 3: JWT Authentication</h3><p>Add JWT-based authentication to protect your API endpoints.</p><ul><li>Implement <code>POST /auth/login</code> — validates credentials, returns JWT token</li><li>Create a <code>verifyToken</code> middleware function</li><li>Protect <code>GET /protected</code> route with the middleware</li><li>Return 401 for missing/invalid tokens</li></ul>`,
-        starterCode: `// Task 3: JWT Authentication\nconst express = require('express');\nconst jwt = require('jsonwebtoken');\nconst app = express();\napp.use(express.json());\n\nconst SECRET = 'simwork-secret-key';\nconst users = [{ id: 1, username: 'admin', password: 'password123' }];\n\n// TODO: POST /auth/login\n// TODO: verifyToken middleware\n// TODO: GET /protected (protected route)\n\nmodule.exports = app;`,
-        solution: `app.post('/auth/login', (req, res) => {\n  const { username, password } = req.body;\n  const user = users.find(u => u.username === username && u.password === password);\n  if (!user) return res.status(401).json({ error: 'Invalid credentials' });\n  const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '1h' });\n  res.json({ token });\n});\n\nconst verifyToken = (req, res, next) => {\n  const auth = req.headers.authorization;\n  if (!auth) return res.status(401).json({ error: 'No token' });\n  try {\n    req.user = jwt.verify(auth.split(' ')[1], SECRET);\n    next();\n  } catch { res.status(401).json({ error: 'Invalid token' }); }\n};\n\napp.get('/protected', verifyToken, (req, res) => {\n  res.json({ message: 'Access granted', user: req.user });\n});`,
-        tests: ['POST /auth/login returns token','Invalid credentials return 401','GET /protected without token = 401','GET /protected with valid token = 200','Token contains user id']
-      },
-      {
-        title: 'Database Integration',
-        time: '50 min',
-        desc: `<h3>Task 4: MongoDB Integration</h3><p>Connect your API to MongoDB using Mongoose and implement data persistence.</p><ul><li>Define a <code>User</code> Mongoose schema with: name, email, createdAt</li><li>Implement <code>GET /db/users</code> — fetch all from DB</li><li>Implement <code>POST /db/users</code> — save to DB with validation</li><li>Handle duplicate email errors gracefully</li></ul>`,
-        starterCode: `// Task 4: MongoDB Integration\nconst mongoose = require('mongoose');\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nmongoose.connect('mongodb://localhost/simwork');\n\n// TODO: Define User schema\n// Fields: name (required), email (required, unique), createdAt (default: Date.now)\n\n// TODO: GET /db/users\n// TODO: POST /db/users (with validation + duplicate handling)\n\nmodule.exports = app;`,
-        solution: `const userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true },\n  createdAt: { type: Date, default: Date.now }\n});\nconst User = mongoose.model('User', userSchema);\n\napp.get('/db/users', async (req, res) => {\n  const users = await User.find();\n  res.json(users);\n});\n\napp.post('/db/users', async (req, res) => {\n  try {\n    const user = await User.create(req.body);\n    res.status(201).json(user);\n  } catch(e) {\n    if (e.code === 11000) return res.status(409).json({ error: 'Email already exists' });\n    res.status(400).json({ error: e.message });\n  }\n});`,
-        tests: ['User schema has required fields','GET /db/users returns array','POST /db/users creates document','Duplicate email returns 409','Missing required field returns 400']
-      },
-      {
-        title: 'Final Integration',
-        time: '45 min',
-        desc: `<h3>Task 5: Final Integration & Error Handling</h3><p>Tie everything together with proper error handling, input validation, and rate limiting.</p><ul><li>Add global error handling middleware</li><li>Validate request bodies using basic checks</li><li>Add rate limiting: max 100 requests per 15 minutes per IP</li><li>Return consistent error response format: <code>{ error, code, timestamp }</code></li></ul>`,
-        starterCode: `// Task 5: Final Integration\nconst express = require('express');\nconst rateLimit = require('express-rate-limit');\nconst app = express();\napp.use(express.json());\n\n// TODO: Configure rate limiter (100 req / 15 min)\n\n// TODO: Input validation middleware\nconst validateUser = (req, res, next) => {\n  // Validate name and email are present and valid\n};\n\n// TODO: POST /api/users with validation\n\n// TODO: Global error handling middleware (4 params: err, req, res, next)\n\nmodule.exports = app;`,
-        solution: `const limiter = rateLimit({ windowMs: 15*60*1000, max: 100 });\napp.use(limiter);\n\nconst validateUser = (req, res, next) => {\n  const { name, email } = req.body;\n  if (!name || !email) return res.status(400).json({ error: 'name and email required', code: 'VALIDATION_ERROR', timestamp: new Date().toISOString() });\n  if (!/^[^@]+@[^@]+\\.[^@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email format', code: 'VALIDATION_ERROR', timestamp: new Date().toISOString() });\n  next();\n};\n\napp.post('/api/users', validateUser, (req, res) => {\n  res.status(201).json({ ...req.body, id: Date.now() });\n});\n\napp.use((err, req, res, next) => {\n  console.error(err);\n  res.status(500).json({ error: 'Internal server error', code: 'SERVER_ERROR', timestamp: new Date().toISOString() });\n});`,
-        tests: ['Rate limiter configured correctly','Validation rejects missing fields','Validation rejects invalid email','Error response has consistent format','Global error handler catches exceptions']
-      }
+  { id:'sw', title:'Software Developer', icon:'💻', color:'#7C6EFA', bgClass:'bg-purple', difficulty:'Intermediate', diffClass:'diff-med', desc:'Build REST APIs, debug code, and work with databases — just like a junior dev at a real company.', duration:'3 hours', tasks:5, xp:500, status:'active', progress:0,
+    tasks_data:[
+      {title:'Hello World API',time:'20 min',desc:`<h3>Task 1: Hello World Endpoint</h3><p>Set up a basic Express.js server and create a <code>GET /hello</code> endpoint.</p><p>Requirements:</p><ul><li>Return status 200</li><li>Return JSON: <code>{ message: "Hello, SimWork!" }</code></li><li>Include <code>timestamp</code> field</li></ul>`,starterCode:`// Task 1: Hello World API\nconst express = require('express');\nconst app = express();\n\n// TODO: Create GET /hello endpoint\n// Return: { message: "Hello, SimWork!", timestamp: "..." }\n\napp.get('/hello', (req, res) => {\n  // Your code here\n\n});\n\napp.listen(3000);\nmodule.exports = app;`,solution:`res.status(200).json({message:"Hello, SimWork!",timestamp:new Date().toISOString()})`,tests:['GET /hello returns 200','Response has message field','Response has timestamp','message === "Hello, SimWork!"','Content-Type is JSON']},
+      {title:'User CRUD API',time:'35 min',desc:`<h3>Task 2: User CRUD API</h3><p>Build full Create, Read, Update, Delete for a users resource.</p><ul><li><code>GET /users</code> — list all</li><li><code>GET /users/:id</code> — get one</li><li><code>POST /users</code> — create</li><li><code>PUT /users/:id</code> — update</li><li><code>DELETE /users/:id</code> — delete</li></ul>`,starterCode:`// Task 2: User CRUD\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nlet users = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' }\n];\nlet nextId = 3;\n\n// TODO: Implement all 5 CRUD endpoints\n\nmodule.exports = app;`,solution:`app.get('/users', (req, res) => res.json(users));\napp.get('/users/:id'`,tests:['GET /users returns array','GET /users/:id returns user','POST /users creates user','PUT /users/:id updates','DELETE /users/:id removes']},
+      {title:'JWT Authentication',time:'40 min',desc:`<h3>Task 3: JWT Auth</h3><p>Add JWT authentication to protect routes.</p><ul><li><code>POST /auth/login</code> — returns token</li><li><code>verifyToken</code> middleware</li><li><code>GET /protected</code> — requires token</li><li>Return 401 for bad tokens</li></ul>`,starterCode:`// Task 3: JWT Auth\nconst express = require('express');\nconst jwt = require('jsonwebtoken');\nconst app = express();\napp.use(express.json());\n\nconst SECRET = 'simwork-secret';\nconst users = [{ id: 1, username: 'admin', password: 'pass123' }];\n\n// TODO: POST /auth/login\n// TODO: verifyToken middleware  \n// TODO: GET /protected\n\nmodule.exports = app;`,solution:`jwt.sign({id:user.id},SECRET)`,tests:['POST /auth/login returns token','Wrong credentials → 401','No token → 401','Valid token → 200','Token has user id']},
+      {title:'Database Integration',time:'50 min',desc:`<h3>Task 4: MongoDB Integration</h3><p>Connect API to MongoDB using Mongoose.</p><ul><li>Define User schema: name, email, createdAt</li><li><code>GET /db/users</code> — fetch all</li><li><code>POST /db/users</code> — save with validation</li><li>Handle duplicate emails (409)</li></ul>`,starterCode:`// Task 4: MongoDB\nconst mongoose = require('mongoose');\nconst express = require('express');\nconst app = express();\napp.use(express.json());\n\nmongoose.connect('mongodb://localhost/simwork');\n\n// TODO: User schema (name, email required, createdAt default)\n// TODO: GET /db/users\n// TODO: POST /db/users\n\nmodule.exports = app;`,solution:`new mongoose.Schema({name:{type:String,required:true},email:{type:String,required:true,unique:true}})`,tests:['User schema defined','GET /db/users works','POST creates document','Duplicate email → 409','Missing field → 400']},
+      {title:'Final Integration',time:'45 min',desc:`<h3>Task 5: Error Handling & Rate Limiting</h3><p>Finalize with proper error handling and validation.</p><ul><li>Rate limit: 100 req / 15 min</li><li>Validate name and email</li><li>Consistent error format: <code>{ error, code, timestamp }</code></li><li>Global error handler</li></ul>`,starterCode:`// Task 5: Production Ready\nconst express = require('express');\nconst rateLimit = require('express-rate-limit');\nconst app = express();\napp.use(express.json());\n\n// TODO: Rate limiter\n// TODO: validateUser middleware\n// TODO: POST /api/users with validation\n// TODO: Global error handler (4 params)\n\nmodule.exports = app;`,solution:`rateLimit({windowMs:15*60*1000,max:100})`,tests:['Rate limiter configured','Validates required fields','Rejects invalid email','Error format consistent','Global handler works']}
     ]
   },
-  {
-    id: 'ds',
-    title: 'Data Science',
-    icon: '📊',
-    color: '#34D399',
-    bgClass: 'bg-green',
-    difficulty: 'Beginner',
-    diffClass: 'diff-easy',
-    desc: 'Analyse datasets, build models, and visualise insights — real data science work from day one.',
-    duration: '2.5 hours',
-    tasks: 4,
-    xp: 400,
-    status: 'locked',
-    progress: 0,
-    tasks_data: []
-  },
-  {
-    id: 'fin',
-    title: 'Finance Analyst',
-    icon: '💰',
-    color: '#F59E0B',
-    bgClass: 'bg-amber',
-    difficulty: 'Hard',
-    diffClass: 'diff-hard',
-    desc: 'Build financial models, analyse P&L statements, and create investor reports — real finance work.',
-    duration: '4 hours',
-    tasks: 6,
-    xp: 600,
-    status: 'locked',
-    progress: 0,
-    tasks_data: []
+  { id:'ds', title:'Data Science', icon:'📊', color:'#34D399', bgClass:'bg-green', difficulty:'Beginner', diffClass:'diff-easy', desc:'Analyse datasets, build models, and create insights — real data science from day one.', duration:'2.5 hours', tasks:4, xp:400, status:'locked', progress:0, tasks_data:[] },
+  { id:'fin', title:'Finance Analyst', icon:'💰', color:'#F59E0B', bgClass:'bg-amber', difficulty:'Hard', diffClass:'diff-hard', desc:'Build financial models, analyse P&L statements, create investor reports.', duration:'4 hours', tasks:6, xp:600, status:'locked', progress:0, tasks_data:[] }
+];
+
+const LEADERBOARD_OTHERS = [
+  {name:'Priya Sharma',score:2840,avatar:'PS',color:'#7C6EFA',sims:3},
+  {name:'Arjun Mehta',score:2710,avatar:'AM',color:'#34D399',sims:3},
+  {name:'Neha Verma',score:2590,avatar:'NV',color:'#F59E0B',sims:2},
+  {name:'Rohit Kumar',score:2450,avatar:'RK',color:'#F87171',sims:2},
+  {name:'Sneha Patil',score:2300,avatar:'SP',color:'#60A5FA',sims:1},
+];
+
+// ═══════════════ AUTH ═══════════════
+function switchAuthTab(tab) {
+  document.getElementById('login-form').style.display = tab==='login'?'block':'none';
+  document.getElementById('signup-form').style.display = tab==='signup'?'block':'none';
+  document.getElementById('tab-login').className = 'auth-tab'+(tab==='login'?' active':'');
+  document.getElementById('tab-signup').className = 'auth-tab'+(tab==='signup'?' active':'');
+}
+
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  let ok = true;
+  if(!email || !email.includes('@')) { document.getElementById('login-email-err').style.display='block'; ok=false; } else { document.getElementById('login-email-err').style.display='none'; }
+  if(pass.length < 6) { document.getElementById('login-pass-err').style.display='block'; ok=false; } else { document.getElementById('login-pass-err').style.display='none'; }
+  if(!ok) return;
+  const account = ACCOUNTS[email.toLowerCase()];
+  if(!account || account.pass !== pass) {
+    document.getElementById('login-pass-err').textContent='Invalid email or password';
+    document.getElementById('login-pass-err').style.display='block';
+    return;
   }
-];
+  user = {...account};
+  launchApp(false);
+}
 
-const LEADERBOARD = [
-  { name: 'Priya Sharma', score: 2840, avatar: 'PS', color: '#7C6EFA' },
-  { name: 'Arjun Mehta', score: 2710, avatar: 'AM', color: '#34D399' },
-  { name: 'Neha Verma', score: 2590, avatar: 'NV', color: '#F59E0B' },
-  { name: 'Rohit Kumar', score: 2450, avatar: 'RK', color: '#F87171' },
-  { name: 'Sneha Patil', score: 2300, avatar: 'SP', color: '#60A5FA' },
-];
+function demoLogin() {
+  user = {...ACCOUNTS['demo@simwork.in']};
+  launchApp(false);
+}
 
-const ACTIVITIES = [
-  { text: 'You started Software Developer simulation', time: '2 hrs ago', color: '#7C6EFA' },
-  { text: 'Profile updated with JavaScript skills', time: '1 day ago', color: '#34D399' },
-  { text: 'Joined SimWork platform', time: '2 days ago', color: '#F59E0B' },
-];
+function handleSignup() {
+  const f=v=>document.getElementById(v).value.trim();
+  const fname=f('su-fname'),lname=f('su-lname'),email=f('su-email'),pass=f('su-password'),
+    city=f('su-city')||'India',role=f('su-role')||'Software Developer',
+    college=f('su-college'),degree=f('su-degree'),branch=f('su-branch'),gradyear=f('su-gradyear'),
+    skillsRaw=f('su-skills');
+  const errEl=document.getElementById('su-err');
+  if(!fname||!lname){errEl.textContent='Please enter your full name';errEl.style.display='block';return;}
+  if(!email||!email.includes('@')){errEl.textContent='Enter a valid email address';errEl.style.display='block';return;}
+  if(pass.length<6){errEl.textContent='Password must be at least 6 characters';errEl.style.display='block';return;}
+  errEl.style.display='none';
+  const skills=skillsRaw?skillsRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
+  user={fname,lname,email,city,role,college,degree,branch,gradyear,skills,avatarColor:'#7C6EFA',xp:0,certs:[],loginTime:new Date(),notifications:{email:true,browser:true,weekly:true},privacy:{publicProfile:true,showEducation:true,showOnLeaderboard:true}};
+  ACCOUNTS[email.toLowerCase()]={...user,pass};
+  launchApp(true);
+}
 
-// ── INIT ──
-function startApp() {
-  const name = document.getElementById('ws-name').value.trim() || 'User';
-  const role = document.getElementById('ws-role').value.trim() || 'Software Developer';
-  user.name = name;
-  user.role = role;
-  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('tb-avatar').textContent = initials;
-  document.getElementById('p-avatar').textContent = initials;
-  document.getElementById('p-name').textContent = name;
-  document.getElementById('p-role').textContent = role + ' · Pune, India';
-  document.getElementById('dash-greeting').textContent = `Welcome back, ${name.split(' ')[0]} 👋`;
-  document.getElementById('welcome-screen').style.display = 'none';
+function launchApp(isNew) {
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('topbar').style.display='flex';
+  document.getElementById('app').style.display='flex';
+  // reset sim statuses
+  SIMULATIONS.forEach(s=>{s.status=s.id==='sw'?'active':'locked';s.progress=0;});
+  taskResults={};currentSim=null;
+  populateUserUI();
   renderAll();
+  navigate('dashboard');
+  if(isNew) showToast(`Welcome to SimWork, ${user.fname}! 🚀`);
+  else showToast(`Welcome back, ${user.fname}! 👋`);
 }
 
-function renderAll() {
-  renderDashboard();
-  renderSimsGrid();
-  renderProfile();
-  renderFullLeaderboard();
-  updateXP();
+function logout() {
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('topbar').style.display='none';
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-password').value='';
+  switchAuthTab('login');
+  showToast('Signed out successfully');
 }
+
+function populateUserUI() {
+  const fullName = `${user.fname} ${user.lname}`.trim();
+  const initials = (user.fname[0]+(user.lname?user.lname[0]:'')).toUpperCase();
+  const hour = new Date().getHours();
+  const greeting = hour<12?'Good morning':hour<17?'Welcome back':'Good evening';
+
+  document.getElementById('tb-avatar').textContent = initials;
+  document.getElementById('tb-avatar').style.background = user.avatarColor;
+  document.getElementById('dd-name').textContent = fullName;
+  document.getElementById('dd-email').textContent = user.email;
+  document.getElementById('sb-username').textContent = user.fname;
+  document.getElementById('sb-userrole').textContent = user.role;
+  document.getElementById('dash-greeting').textContent = `${hour<12?'Good morning':hour<17?'Welcome back':'Good evening'}, ${user.fname} 👋`;
+  document.getElementById('dash-sub').textContent = `Ready to level up your skills today?`;
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('ide-page').style.display='none';
+
+  if(page==='ide'){
+    document.getElementById('ide-page').style.display='flex';
+    document.getElementById('ide-page').style.flexDirection='column';
+    document.getElementById('sb-ide-item').classList.add('active');
+    document.getElementById('tb-breadcrumb').textContent=(currentSim?.title||'')+ ' → IDE';
+    return;
+  }
+  const pg=document.getElementById('page-'+page);
+  if(pg) pg.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i=>{
+    if(i.getAttribute('onclick')?.includes(`'${page}'`)) i.classList.add('active');
+  });
+  const labels={dashboard:'Dashboard',simulations:'Simulations',profile:'My Profile',settings:'Settings','leaderboard-page':'Leaderboard'};
+  document.getElementById('tb-breadcrumb').textContent=labels[page]||page;
+  if(page==='profile'){renderProfile();}
+  if(page==='settings'){renderSettings('account');}
+  if(page==='leaderboard-page'){renderFullLeaderboard();}
+  closeDropdown();
+}
+
+// ═══════════════ RENDER ═══════════════
+function renderAll() { renderDashboard(); renderSimsGrid(); updateXP(); }
 
 function updateXP() {
-  document.getElementById('tb-score').textContent = `XP: ${user.xp}`;
-  document.getElementById('ds-xp').textContent = user.xp;
-  document.getElementById('p-xp').textContent = user.xp;
-  const done = SIMULATIONS.filter(s=>s.status==='done').length;
-  document.getElementById('ds-done').textContent = done;
-  document.getElementById('p-sims').textContent = done;
-  document.getElementById('ds-certs').textContent = user.certs.length;
-  document.getElementById('p-certs-count').textContent = user.certs.length;
-  const totalSims = SIMULATIONS.length;
-  const pct = Math.round((done/totalSims)*100);
-  document.getElementById('sb-prog-fill').style.width = pct+'%';
-  document.getElementById('sb-prog-stat').textContent = `${done} / ${totalSims} simulations`;
+  document.getElementById('tb-score').textContent=`XP: ${user.xp}`;
+  document.getElementById('ds-xp').textContent=user.xp;
+  document.getElementById('p-xp').textContent=user.xp;
+  const done=SIMULATIONS.filter(s=>s.status==='done').length;
+  document.getElementById('ds-done').textContent=done;
+  document.getElementById('p-sims').textContent=done;
+  document.getElementById('ds-certs').textContent=user.certs.length;
+  document.getElementById('p-certs-count').textContent=user.certs.length;
+  const pct=Math.round((done/SIMULATIONS.length)*100);
+  document.getElementById('sb-prog-fill').style.width=pct+'%';
+  document.getElementById('sb-prog-stat').textContent=`${done} / ${SIMULATIONS.length} simulations`;
 }
 
 function renderDashboard() {
   // Sim list
-  const el = document.getElementById('dash-sim-list');
-  el.innerHTML = SIMULATIONS.map(s => `
+  document.getElementById('dash-sim-list').innerHTML=SIMULATIONS.map(s=>`
     <div class="sim-row" onclick="openSim('${s.id}')">
-      <div class="sim-icon ${s.bgClass}">${s.icon}</div>
-      <div class="sim-info">
-        <div class="sim-name">${s.title}</div>
-        <div class="sim-meta">${s.tasks} tasks · ${s.xp} XP</div>
-      </div>
-      <div class="sim-status status-${s.status}">${s.status==='active'?'In Progress':s.status==='done'?'Completed':'Locked'}</div>
+      <div class="sim-icon" style="background:${s.color}18">${s.icon}</div>
+      <div class="sim-info"><div class="sim-name">${s.title}</div><div class="sim-meta">${s.tasks} tasks · ${s.xp} XP</div></div>
+      <div class="sim-status status-${s.status}">${s.status==='active'?'In Progress':s.status==='done'?'✓ Done':'🔒 Locked'}</div>
     </div>`).join('');
 
   // Activity
-  const ae = document.getElementById('dash-activity');
-  ae.innerHTML = ACTIVITIES.map(a => `
-    <div class="activity-item">
-      <div class="act-dot" style="background:${a.color}"></div>
-      <div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div>
-    </div>`).join('');
+  const acts=[
+    {text:`You joined SimWork as <strong style="color:var(--text)">${user.fname}</strong>`,time:'Just now',color:'#7C6EFA'},
+    {text:'Software Developer simulation unlocked',time:'Now',color:'#34D399'},
+    {text:'Profile created successfully',time:'Today',color:'#F59E0B'},
+  ];
+  document.getElementById('dash-activity').innerHTML=acts.map(a=>`
+    <div class="activity-item"><div class="act-dot" style="background:${a.color}"></div>
+    <div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div></div>`).join('');
 
-  // Leaderboard preview
-  const initials = user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const allLB = [{ name: user.name, score: user.xp, avatar: initials, color: '#7C6EFA', isMe: true }, ...LEADERBOARD].sort((a,b)=>b.score-a.score).slice(0,5);
-  const le = document.getElementById('dash-leaderboard');
-  le.innerHTML = allLB.map((l,i) => `
+  // Leaderboard
+  const initials=(user.fname[0]+(user.lname?user.lname[0]:'')).toUpperCase();
+  const lb=[{name:`${user.fname} ${user.lname}`.trim(),score:user.xp,avatar:initials,color:user.avatarColor,isMe:true},...LEADERBOARD_OTHERS].sort((a,b)=>b.score-a.score).slice(0,5);
+  document.getElementById('dash-leaderboard').innerHTML=lb.map((l,i)=>`
     <div class="leaderboard-row">
       <div class="lb-rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
       <div class="lb-avatar" style="background:${l.color}22;color:${l.color}">${l.avatar}</div>
-      <div class="lb-name" style="${l.isMe?'color:var(--accent);font-weight:700':''}"> ${l.name}${l.isMe?' (you)':''}</div>
+      <div class="lb-name" style="${l.isMe?'color:var(--accent);font-weight:700':''}">${l.name}${l.isMe?' (you)':''}</div>
       <div class="lb-score">${l.score} XP</div>
     </div>`).join('');
 }
 
 function renderSimsGrid(filter='all') {
-  const grid = document.getElementById('sims-grid');
-  const filtered = filter==='all' ? SIMULATIONS : SIMULATIONS.filter(s=>s.status===filter);
-  grid.innerHTML = filtered.map(s => {
-    const pct = s.progress;
-    const btnClass = s.status==='active'?'scb-continue':s.status==='done'?'scb-done':'scb-start';
-    const btnText = s.status==='active'?'Continue →':s.status==='done'?'✓ Completed':'Start Simulation →';
-    const disabled = s.status==='done'?'disabled':'';
-    return `
-    <div class="sim-card" onclick="openSim('${s.id}')">
-      <div class="sim-card-header" style="background:${s.color}18">
-        ${s.icon}
-        <div class="sim-card-difficulty ${s.diffClass}">${s.difficulty}</div>
-      </div>
+  const filtered=filter==='all'?SIMULATIONS:SIMULATIONS.filter(s=>s.status===filter);
+  document.getElementById('sims-grid').innerHTML=filtered.map(s=>{
+    const btnClass=s.status==='active'?'scb-continue':s.status==='done'?'scb-done':'scb-start';
+    const btnText=s.status==='active'?'Continue →':s.status==='done'?'✓ Completed':'Start Simulation →';
+    return `<div class="sim-card" onclick="openSim('${s.id}')">
+      <div class="sim-card-header" style="background:${s.color}18">${s.icon}<div class="sim-card-difficulty ${s.diffClass}">${s.difficulty}</div></div>
       <div class="sim-card-body">
         <div class="sim-card-title">${s.title} Simulation</div>
         <div class="sim-card-desc">${s.desc}</div>
-        <div class="sim-card-meta">
-          <span>⏱ ${s.duration}</span>
-          <span>📋 ${s.tasks} tasks</span>
-          <span>⚡ ${s.xp} XP</span>
-        </div>
-        <div class="sim-card-progress"><div class="sim-card-prog-fill" style="width:${pct}%;background:${s.color}"></div></div>
-        <button class="sim-card-btn ${btnClass}" ${disabled}>${btnText}</button>
-      </div>
-    </div>`;
+        <div class="sim-card-meta"><span>⏱ ${s.duration}</span><span>📋 ${s.tasks} tasks</span><span>⚡ ${s.xp} XP</span></div>
+        <div class="sim-card-progress"><div class="sim-card-prog-fill" style="width:${s.progress}%;background:${s.color}"></div></div>
+        <button class="sim-card-btn ${btnClass}" ${s.status==='done'?'disabled':''}>${btnText}</button>
+      </div></div>`;
   }).join('');
 }
 
-function filterSims(f, el) {
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderSimsGrid(f);
-}
+function filterSims(f,el){document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderSimsGrid(f);}
 
 function renderProfile() {
-  const grid = document.getElementById('certs-grid');
-  if(user.certs.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:14px">Complete simulations to earn certificates 🏅</div>`;
-    return;
+  const fullName=`${user.fname} ${user.lname}`.trim();
+  const initials=(user.fname[0]+(user.lname?user.lname[0]:'')).toUpperCase();
+  document.getElementById('p-avatar-big').textContent=initials;
+  document.getElementById('p-avatar-big').style.background=user.avatarColor+'33';
+  document.getElementById('p-avatar-big').style.color=user.avatarColor;
+  document.getElementById('p-name').textContent=fullName;
+  document.getElementById('p-email').textContent='✉️ '+user.email;
+  document.getElementById('p-location').textContent='📍 '+(user.city||'India');
+  document.getElementById('p-rank').textContent='#42';
+  // Tags
+  const tags=[...user.skills.slice(0,4)];
+  if(user.role) tags.unshift(user.role);
+  document.getElementById('p-tags').innerHTML=tags.map(t=>`<span class="ptag">${t}</span>`).join('')+(user.degree?`<span class="ptag ptag-edu">🎓 ${user.degree}</span>`:'');
+  // Education
+  const eduEl=document.getElementById('p-education');
+  if(user.college) {
+    eduEl.innerHTML=`<div class="edu-card">
+      <div class="edu-icon">🏛️</div>
+      <div>
+        <div class="edu-title">${user.college}</div>
+        <div class="edu-sub">${user.degree||'Degree'}${user.branch?' · '+user.branch:''}</div>
+        <div class="edu-year">${user.gradyear?'Graduating '+user.gradyear:'Current Student'}</div>
+      </div></div>`;
+  } else {
+    eduEl.innerHTML=`<div style="padding:20px;color:var(--muted);font-size:13px;background:var(--s1);border:1px solid var(--border);border-radius:10px">No education info added. <span style="color:var(--accent);cursor:pointer" onclick="navigate('settings');switchSettingsTab('education',null)">Add education →</span></div>`;
   }
-  grid.innerHTML = user.certs.map(c => `
-    <div class="cert-card" style="border-top-color:${c.color}">
-      <div class="cert-card-icon">${c.icon}</div>
-      <div class="cert-card-title">${c.title} Certificate</div>
-      <div class="cert-card-date">${c.date} · ID: ${c.id}</div>
-      <div class="cert-card-score">
-        <div class="cert-score-badge" style="background:${c.color}18;color:${c.color}">${c.score}/100</div>
-      </div>
-    </div>`).join('');
+  // Certs
+  const certsEl=document.getElementById('p-certs-grid');
+  if(user.certs.length===0){
+    certsEl.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:13px;background:var(--s1);border:1px solid var(--border);border-radius:10px">Complete simulations to earn certificates 🏅</div>`;
+  } else {
+    certsEl.innerHTML=user.certs.map(c=>`
+      <div class="cert-card" style="border-top-color:${c.color}">
+        <div class="cert-card-icon">${c.icon}</div>
+        <div class="cert-card-title">${c.title} Certificate</div>
+        <div class="cert-card-date">${c.date} · ${c.id}</div>
+        <div><span class="cert-score-badge" style="background:${c.color}18;color:${c.color}">${c.score}/100</span></div>
+      </div>`).join('');
+  }
+  updateXP();
 }
 
 function renderFullLeaderboard() {
-  const initials = user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const allLB = [{ name: user.name, score: user.xp, avatar: initials, color: '#7C6EFA', isMe: true }, ...LEADERBOARD].sort((a,b)=>b.score-a.score);
-  const el = document.getElementById('full-leaderboard');
-  el.innerHTML = allLB.map((l,i) => `
-    <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);${l.isMe?'background:rgba(124,110,250,.06)':''}">
-      <div style="font-family:var(--mono);font-size:14px;font-weight:700;width:36px;color:var(--muted)">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
-      <div style="width:36px;height:36px;border-radius:50%;background:${l.color}22;color:${l.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">${l.avatar}</div>
-      <div style="flex:1;font-size:14px;font-weight:${l.isMe?700:500};color:${l.isMe?'var(--accent)':'var(--text)'}">${l.name}${l.isMe?' (you)':''}</div>
-      <div style="font-family:var(--mono);font-size:13px;color:var(--accent2)">${l.score} XP</div>
+  const initials=(user.fname[0]+(user.lname?user.lname[0]:'')).toUpperCase();
+  const all=[{name:`${user.fname} ${user.lname}`.trim(),score:user.xp,avatar:initials,color:user.avatarColor,sims:SIMULATIONS.filter(s=>s.status==='done').length,isMe:true},...LEADERBOARD_OTHERS].sort((a,b)=>b.score-a.score);
+  document.getElementById('full-leaderboard').innerHTML=all.map((l,i)=>`
+    <div class="lb-row ${l.isMe?'me':''}">
+      <div class="lb-rank-num">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div class="lb-full-avatar" style="background:${l.color}22;color:${l.color}">${l.avatar}</div>
+      <div class="lb-full-name" style="${l.isMe?'color:var(--accent);font-weight:700':''}">${l.name}${l.isMe?' (you)':''}</div>
+      <div class="lb-full-sims">${l.sims} sim${l.sims!==1?'s':''}</div>
+      <div class="lb-full-score">${l.score} XP</div>
     </div>`).join('');
 }
 
-// ── NAVIGATION ──
-function navigate(page) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+// ═══════════════ SETTINGS ═══════════════
+const AVATAR_COLORS=['#7C6EFA','#34D399','#F59E0B','#F87171','#60A5FA','#A78BFA','#EC4899'];
 
-  if(page === 'ide') {
-    document.getElementById('ide-page').classList.add('active');
-    document.getElementById('ide-page').style.display='flex';
-    document.getElementById('sb-ide-item').classList.add('active');
-    document.getElementById('tb-breadcrumb').textContent = currentSim?.title + ' → IDE';
-    return;
+function switchSettingsTab(tab, el) {
+  document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.settings-nav-item').forEach(i=>{ if(i.getAttribute('onclick')?.includes(`'${tab}'`)) i.classList.add('active'); });
+  renderSettings(tab);
+}
+
+function renderSettings(tab) {
+  const p=document.getElementById('settings-panel');
+  if(tab==='account'){
+    p.innerHTML=`
+      <div class="settings-title">Account Settings</div>
+      <div class="settings-sub">Manage your login credentials and account preferences</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Identity</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Full Name</div><div class="settings-row-desc">${user.fname} ${user.lname}</div></div>
+          <input class="settings-input" id="set-name" value="${user.fname} ${user.lname}" placeholder="Full name">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Email Address</div><div class="settings-row-desc">Used to sign in</div></div>
+          <input class="settings-input" id="set-email" value="${user.email}" type="email">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">City / Location</div><div class="settings-row-desc">Shown on your profile</div></div>
+          <input class="settings-input" id="set-city" value="${user.city||''}" placeholder="e.g. Pune">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Target Role</div><div class="settings-row-desc">Your career goal</div></div>
+          <select class="settings-select" id="set-role">
+            ${['Software Developer','Data Scientist','Finance Analyst','UI/UX Designer','DevOps Engineer','Product Manager'].map(r=>`<option ${user.role===r?'selected':''}>${r}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title">Avatar Color</div>
+        <div class="avatar-picker">
+          <div class="avatar-preview" id="set-avatar-preview" style="background:${user.avatarColor}33;color:${user.avatarColor}">${(user.fname[0]+(user.lname?user.lname[0]:'')).toUpperCase()}</div>
+          <div class="color-swatches">${AVATAR_COLORS.map(c=>`<div class="swatch ${user.avatarColor===c?'selected':''}" style="background:${c}" onclick="pickColor('${c}')"></div>`).join('')}</div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title">Password</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Change Password</div><div class="settings-row-desc">Leave blank to keep current password</div></div>
+          <input class="settings-input" id="set-newpass" type="password" placeholder="New password">
+        </div>
+      </div>
+      <button class="settings-save-btn" onclick="saveAccountSettings()">Save Changes</button>`;
   }
-
-  document.getElementById('ide-page').classList.remove('active');
-  document.getElementById('ide-page').style.display='none';
-  const pg = document.getElementById('page-'+page);
-  if(pg) { pg.classList.add('active'); }
-  document.querySelectorAll('.sb-item').forEach(i=>{
-    if(i.getAttribute('onclick')?.includes(`'${page}'`)) i.classList.add('active');
-  });
-  const labels = {dashboard:'Dashboard',simulations:'Simulations',profile:'My Profile','leaderboard-page':'Leaderboard'};
-  document.getElementById('tb-breadcrumb').textContent = labels[page] || page;
-  if(page==='profile'){renderProfile();updateXP();}
-  if(page==='leaderboard-page'){renderFullLeaderboard();}
+  else if(tab==='profile-edit'){
+    p.innerHTML=`
+      <div class="settings-title">Edit Profile</div>
+      <div class="settings-sub">Update your public profile and skills</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Skills</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Your Skills</div><div class="settings-row-desc">Comma separated, shown on public profile</div></div>
+          <input class="settings-input" id="set-skills" value="${user.skills.join(', ')}" placeholder="JavaScript, Python...">
+        </div>
+      </div>
+      <button class="settings-save-btn" onclick="saveProfileEdit()">Save Changes</button>`;
+  }
+  else if(tab==='education'){
+    p.innerHTML=`
+      <div class="settings-title">Education</div>
+      <div class="settings-sub">Your academic background shown on your profile</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Academic Details</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">College / University</div><div class="settings-row-desc">Where you studied or are studying</div></div>
+          <input class="settings-input" id="set-college" value="${user.college||''}" placeholder="Pune University">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Degree</div><div class="settings-row-desc">Type of qualification</div></div>
+          <select class="settings-select" id="set-degree">
+            ${['','B.Tech / B.E.','B.Sc','BCA','MCA','M.Tech','MBA','B.Com','Other'].map(d=>`<option ${user.degree===d?'selected':''}>${d}</option>`).join('')}
+          </select>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Branch / Major</div><div class="settings-row-desc">Your specialisation</div></div>
+          <input class="settings-input" id="set-branch" value="${user.branch||''}" placeholder="Computer Science">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Graduation Year</div><div class="settings-row-desc">Actual or expected</div></div>
+          <select class="settings-select" id="set-gradyear">
+            ${['','2024','2025','2026','2027','2028'].map(y=>`<option ${user.gradyear===y?'selected':''}>${y}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <button class="settings-save-btn" onclick="saveEducation()">Save Education</button>`;
+  }
+  else if(tab==='notifications'){
+    const n=user.notifications;
+    p.innerHTML=`
+      <div class="settings-title">Notifications</div>
+      <div class="settings-sub">Control when and how SimWork contacts you</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Communication</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Email Notifications</div><div class="settings-row-desc">Certificates, task results, and updates</div></div>
+          <button class="toggle ${n.email?'on':'off'}" id="tog-email" onclick="toggleNotif('email')"></button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Browser Notifications</div><div class="settings-row-desc">Real-time alerts while using SimWork</div></div>
+          <button class="toggle ${n.browser?'on':'off'}" id="tog-browser" onclick="toggleNotif('browser')"></button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Weekly Progress Report</div><div class="settings-row-desc">XP summary every Monday</div></div>
+          <button class="toggle ${n.weekly?'on':'off'}" id="tog-weekly" onclick="toggleNotif('weekly')"></button>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--accent2);margin-top:8px">✓ Changes saved automatically</div>`;
+  }
+  else if(tab==='privacy'){
+    const pr=user.privacy;
+    p.innerHTML=`
+      <div class="settings-title">Privacy</div>
+      <div class="settings-sub">Control your visibility to other users and recruiters</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Visibility</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Public Profile</div><div class="settings-row-desc">Recruiters can view your portfolio and certificates</div></div>
+          <button class="toggle ${pr.publicProfile?'on':'off'}" id="tog-public" onclick="togglePrivacy('publicProfile')"></button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Show Education</div><div class="settings-row-desc">Display your academic details on public profile</div></div>
+          <button class="toggle ${pr.showEducation?'on':'off'}" id="tog-edu" onclick="togglePrivacy('showEducation')"></button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Show on Leaderboard</div><div class="settings-row-desc">Appear in the public rankings</div></div>
+          <button class="toggle ${pr.showOnLeaderboard?'on':'off'}" id="tog-lb" onclick="togglePrivacy('showOnLeaderboard')"></button>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--accent2);margin-top:8px">✓ Changes saved automatically</div>`;
+  }
+  else if(tab==='danger'){
+    p.innerHTML=`
+      <div class="settings-title" style="color:var(--rose)">Danger Zone</div>
+      <div class="settings-sub">Irreversible actions. Proceed with caution.</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Account Actions</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Reset Progress</div><div class="settings-row-desc">Clear all XP, simulation progress, and certificates</div></div>
+          <button class="settings-danger-btn" onclick="confirmReset()">Reset All Progress</button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Sign Out</div><div class="settings-row-desc">Sign out of your SimWork account</div></div>
+          <button class="settings-danger-btn" onclick="logout()">Sign Out</button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">Delete Account</div><div class="settings-row-desc">Permanently remove your account and all data</div></div>
+          <button class="settings-danger-btn" onclick="showToast('Account deletion requires email confirmation — coming soon')">Delete Account</button>
+        </div>
+      </div>`;
+  }
 }
 
-// ── SIMULATION ──
-function openSim(id) {
-  const sim = SIMULATIONS.find(s=>s.id===id);
-  if(!sim) return;
-  if(sim.status==='locked') { showToast('🔒 Complete previous simulations first!'); return; }
-  if(sim.status==='done') { showToast('✅ Already completed! Check your profile.'); navigate('profile'); return; }
-  currentSim = sim;
-  currentTaskIndex = 0;
-  taskResults = {};
-  hintsUsed = 0;
+function pickColor(c){
+  user.avatarColor=c;
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
+  event.target.classList.add('selected');
+  const prev=document.getElementById('set-avatar-preview');
+  if(prev){prev.style.background=c+'33';prev.style.color=c;}
+  document.getElementById('tb-avatar').style.background=c;
+}
+
+function saveAccountSettings(){
+  const nameVal=(document.getElementById('set-name')?.value||'').trim();
+  const parts=nameVal.split(' ');
+  user.fname=parts[0]||user.fname;
+  user.lname=parts.slice(1).join(' ')||user.lname;
+  user.email=document.getElementById('set-email')?.value.trim()||user.email;
+  user.city=document.getElementById('set-city')?.value.trim()||user.city;
+  user.role=document.getElementById('set-role')?.value||user.role;
+  populateUserUI();
+  showToast('✅ Account settings saved!');
+}
+
+function saveProfileEdit(){
+  const skillsRaw=document.getElementById('set-skills')?.value||'';
+  user.skills=skillsRaw.split(',').map(s=>s.trim()).filter(Boolean);
+  showToast('✅ Profile updated!');
+}
+
+function saveEducation(){
+  user.college=document.getElementById('set-college')?.value.trim()||'';
+  user.degree=document.getElementById('set-degree')?.value||'';
+  user.branch=document.getElementById('set-branch')?.value.trim()||'';
+  user.gradyear=document.getElementById('set-gradyear')?.value||'';
+  showToast('✅ Education saved!');
+}
+
+function toggleNotif(key){
+  user.notifications[key]=!user.notifications[key];
+  const el=document.getElementById('tog-'+key);
+  if(el){el.className='toggle '+(user.notifications[key]?'on':'off');}
+  showToast(user.notifications[key]?`🔔 ${key} notifications on`:`🔕 ${key} notifications off`);
+}
+
+function togglePrivacy(key){
+  user.privacy[key]=!user.privacy[key];
+  const map={publicProfile:'public',showEducation:'edu',showOnLeaderboard:'lb'};
+  const el=document.getElementById('tog-'+map[key]);
+  if(el){el.className='toggle '+(user.privacy[key]?'on':'off');}
+  showToast(user.privacy[key]?'✅ Setting enabled':'Setting disabled');
+}
+
+function confirmReset(){
+  if(confirm('Reset all progress? This cannot be undone.')){
+    user.xp=0;user.certs=[];
+    SIMULATIONS.forEach(s=>{s.status=s.id==='sw'?'active':'locked';s.progress=0;});
+    taskResults={};
+    updateXP();renderDashboard();renderSimsGrid();
+    showToast('Progress reset');
+  }
+}
+
+// ═══════════════ SIMULATIONS / IDE ═══════════════
+function openSim(id){
+  const sim=SIMULATIONS.find(s=>s.id===id);
+  if(!sim)return;
+  if(sim.status==='locked'){showToast('🔒 Complete previous simulations first!');return;}
+  if(sim.status==='done'){showToast('✅ Already completed! View in profile.');navigate('profile');return;}
+  if(!sim.tasks_data.length){showToast('🚧 Coming soon — stay tuned!');return;}
+  currentSim=sim;currentTaskIndex=0;taskResults={};
   document.getElementById('sb-ide-item').style.display='flex';
-  loadTask(0);
-  navigate('ide');
+  loadTask(0);navigate('ide');
 }
 
-function loadTask(idx) {
-  if(!currentSim || !currentSim.tasks_data[idx]) return;
-  currentTaskIndex = idx;
-  const task = currentSim.tasks_data[idx];
-  const total = currentSim.tasks_data.length;
-
-  document.getElementById('ide-sim-title').textContent = currentSim.title + ' Simulation';
-  document.getElementById('ide-task-info').textContent = `Task ${idx+1} of ${total}`;
-
-  // Task steps
-  const stepsList = document.getElementById('task-steps-list');
-  stepsList.innerHTML = currentSim.tasks_data.map((t,i) => `
-    <div class="task-step ${i===idx?'ts-active':''} ${taskResults[i]?'ts-done':''}" onclick="switchTask(${i})">
+function loadTask(idx){
+  if(!currentSim||!currentSim.tasks_data[idx])return;
+  currentTaskIndex=idx;
+  const task=currentSim.tasks_data[idx];
+  document.getElementById('ide-sim-title').textContent=currentSim.title+' Simulation';
+  document.getElementById('ide-task-info').textContent=`Task ${idx+1} of ${currentSim.tasks_data.length}`;
+  document.getElementById('task-steps-list').innerHTML=`<div style="font-size:10px;color:var(--muted);font-family:var(--mono);padding:2px 12px 8px;text-transform:uppercase;letter-spacing:.1em">Tasks</div>`+currentSim.tasks_data.map((t,i)=>`
+    <div class="task-step ${i===idx?'ts-active':''} ${taskResults[i]?'ts-done':''}" onclick="switchTask(${i})" style="margin:2px 8px">
       <div class="ts-num">TASK ${i+1}</div>
-      <div class="ts-title">${t.title} ${taskResults[i]?'✓':''}</div>
+      <div class="ts-title">${t.title}${taskResults[i]?' ✓':''}</div>
       <div class="ts-time">${t.time}</div>
     </div>`).join('');
-
-  // Task description
-  document.getElementById('task-description').innerHTML = task.desc;
-
-  // Code editor
-  const editor = document.getElementById('code-editor');
-  editor.value = task.starterCode;
+  document.getElementById('task-description').innerHTML=task.desc;
+  document.getElementById('code-editor').value=task.starterCode;
   updateLineNums();
-
-  // Timer
   clearInterval(timerInterval);
-  const mins = parseInt(task.time);
-  timerSeconds = mins * 60;
+  timerSeconds=parseInt(task.time)*60;
   updateTimer();
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    updateTimer();
-    if(timerSeconds <= 0) { clearInterval(timerInterval); showToast('⏰ Time is up! Submitting...'); submitTask(); }
-  }, 1000);
-
-  // Reset output
+  timerInterval=setInterval(()=>{timerSeconds--;updateTimer();if(timerSeconds<=0){clearInterval(timerInterval);submitTask();}},1000);
   clearConsole();
-  renderTests(task.tests, 'pending');
+  renderTests(task.tests,'pending');
   renderScore(0);
-  renderHints(idx);
-  switchOpTab('console', document.querySelector('.optab'));
+  renderHints();
+  switchOpTab('console',document.querySelector('.optab'));
 }
 
-function switchTask(idx) {
-  if(idx !== currentTaskIndex) loadTask(idx);
+function switchTask(idx){if(idx!==currentTaskIndex)loadTask(idx);}
+function updateTimer(){
+  const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');
+  const el=document.getElementById('ide-timer');
+  el.textContent=`⏱ ${m}:${s}`;
+  el.className='ide-timer '+(timerSeconds>300?'timer-ok':timerSeconds>60?'timer-warn':'timer-danger');
 }
-
-function updateTimer() {
-  const m = Math.floor(timerSeconds/60).toString().padStart(2,'0');
-  const s = (timerSeconds%60).toString().padStart(2,'0');
-  const el = document.getElementById('ide-timer');
-  el.textContent = `⏱ ${m}:${s}`;
-  el.className = 'ide-timer ' + (timerSeconds > 300 ? 'timer-ok' : timerSeconds > 60 ? 'timer-warn' : 'timer-danger');
+function updateLineNums(){
+  const lines=document.getElementById('code-editor').value.split('\n').length;
+  document.getElementById('line-nums').innerHTML=Array.from({length:lines},(_,i)=>`<span>${i+1}</span>`).join('');
 }
+function clearConsole(){document.getElementById('op-console').innerHTML=`<div class="console-line"><span class="cl-info">$ SimWork IDE ready</span></div><div class="console-line"><span class="cl-muted">$ Write your code and press Run ▶</span></div>`;}
 
-function updateLineNums() {
-  const code = document.getElementById('code-editor').value;
-  const lines = code.split('\n').length;
-  const el = document.getElementById('line-nums');
-  el.innerHTML = Array.from({length: lines}, (_,i) => `<span>${i+1}</span>`).join('');
-}
-
-function clearConsole() {
-  document.getElementById('op-console').innerHTML = `
-    <div class="console-line"><span class="cl-prompt">$</span><span class="cl-info"> SimWork IDE v1.0 ready</span></div>
-    <div class="console-line"><span class="cl-prompt">$</span><span style="color:var(--muted)"> Write your code and press Run</span></div>`;
-}
-
-function runCode() {
-  const console_el = document.getElementById('op-console');
-  const task = currentSim.tasks_data[currentTaskIndex];
-  const code = document.getElementById('code-editor').value;
-
-  // Add running line
-  console_el.innerHTML += `<div class="console-line"><span class="cl-prompt">&gt;</span><span class="cl-info"> Running code...</span></div>`;
-
-  setTimeout(() => {
-    // Basic check: does code contain solution keywords?
-    const sol = task.solution;
-    const solKeywords = sol.split('\n').filter(l=>l.trim().length > 5).map(l=>l.trim().slice(0,20));
-    let matches = 0;
-    solKeywords.forEach(kw => { if(code.includes(kw.slice(0,15))) matches++; });
-    const completeness = Math.min(100, Math.round((matches / Math.max(solKeywords.length,1)) * 100));
-    const passed = Math.floor(completeness / 20);
-
-    if(code.includes('TODO')) {
-      console_el.innerHTML += `<div class="console-line"><span class="cl-warn">⚠ Incomplete: TODO items found in code</span></div>`;
-    }
-    if(code.length < 100) {
-      console_el.innerHTML += `<div class="console-line"><span class="cl-err">✗ Code too short — add your implementation</span></div>`;
-    } else {
-      console_el.innerHTML += `<div class="console-line"><span class="cl-ok">✓ Code parsed successfully</span></div>`;
-      console_el.innerHTML += `<div class="console-line"><span class="cl-info">→ Running test suite (${task.tests.length} tests)...</span></div>`;
-      setTimeout(() => {
-        console_el.innerHTML += `<div class="console-line"><span class="${passed>=3?'cl-ok':'cl-warn'}">${passed >= task.tests.length ? '✓ All tests passed!' : `⚠ ${passed}/${task.tests.length} tests passing`}</span></div>`;
-        renderTests(task.tests, completeness);
+function runCode(){
+  const task=currentSim.tasks_data[currentTaskIndex];
+  const code=document.getElementById('code-editor').value;
+  const con=document.getElementById('op-console');
+  con.innerHTML+=`<div class="console-line"><span class="cl-muted">$ </span><span class="cl-info">Running code...</span></div>`;
+  setTimeout(()=>{
+    const kwds=task.solution.split(/[;\n]/).filter(l=>l.trim().length>4).map(l=>l.trim().slice(0,18));
+    let hits=kwds.filter(k=>code.includes(k.slice(0,14))).length;
+    const completeness=Math.min(100,Math.round((hits/Math.max(kwds.length,1))*100));
+    if(code.includes('TODO'))con.innerHTML+=`<div class="console-line"><span class="cl-warn">⚠ TODO items remain in your code</span></div>`;
+    if(code.length<80)con.innerHTML+=`<div class="console-line"><span class="cl-err">✗ Implementation too short</span></div>`;
+    else{
+      con.innerHTML+=`<div class="console-line"><span class="cl-ok">✓ Code parsed</span></div>`;
+      setTimeout(()=>{
+        const passed=Math.round((completeness/100)*task.tests.length);
+        con.innerHTML+=`<div class="console-line"><span class="${passed>=task.tests.length?'cl-ok':'cl-warn'}">${passed>=task.tests.length?'✓ All tests passed!':passed+'/'+task.tests.length+' tests passing'}</span></div>`;
+        renderTests(task.tests,completeness);
         renderScore(completeness);
-        switchOpTab('tests', document.querySelectorAll('.optab')[1]);
-      }, 400);
+        switchOpTab('tests',document.querySelectorAll('.optab')[1]);
+      },400);
     }
-    console_el.scrollTop = console_el.scrollHeight;
-  }, 600);
+    con.scrollTop=con.scrollHeight;
+  },500);
 }
 
-function renderTests(tests, completeness) {
-  const el = document.getElementById('op-tests');
-  if(completeness === 'pending') {
-    el.innerHTML = tests.map(t => `
-      <div class="test-item test-pending">
-        <div class="test-icon">○</div>
-        <div class="test-name">${t}</div>
-        <div class="test-ms">— ms</div>
-      </div>`).join('');
-    return;
-  }
-  const passPct = completeness / 100;
-  el.innerHTML = tests.map((t,i) => {
-    const pass = i < Math.round(tests.length * passPct);
-    return `<div class="test-item ${pass?'test-pass':'test-fail'}">
-      <div class="test-icon">${pass?'✅':'❌'}</div>
-      <div class="test-name">${t}</div>
-      <div class="test-ms">${pass ? Math.floor(Math.random()*40+10)+' ms' : 'FAIL'}</div>
-    </div>`;
-  }).join('');
+function renderTests(tests,completeness){
+  const el=document.getElementById('op-tests');
+  if(completeness==='pending'){el.innerHTML=tests.map(t=>`<div class="test-item test-pending"><div>○</div><div class="test-name">${t}</div><div class="test-ms">—</div></div>`).join('');return;}
+  const n=Math.round((completeness/100)*tests.length);
+  el.innerHTML=tests.map((t,i)=>{const p=i<n;return`<div class="test-item ${p?'test-pass':'test-fail'}"><div>${p?'✅':'❌'}</div><div class="test-name">${t}</div><div class="test-ms">${p?Math.floor(Math.random()*40+8)+'ms':'FAIL'}</div></div>`;}).join('');
 }
 
-function renderScore(completeness) {
-  const el = document.getElementById('op-score');
-  const c = Math.round(completeness);
-  const r = 40; const circ = 2*Math.PI*r;
-  const offset = circ - (c/100)*circ;
-  const color = c>=80?'var(--accent2)':c>=50?'var(--accent3)':'var(--rose)';
-  const breakdown = [
-    { label:'Correctness', val:Math.round(c*0.5), max:50, color:'var(--accent)' },
-    { label:'Test coverage', val:Math.round(c*0.3), max:30, color:'var(--accent2)' },
-    { label:'Code quality', val:Math.round(c*0.2), max:20, color:'var(--accent3)' },
-  ];
-  el.innerHTML = `
+function renderScore(completeness){
+  const c=Math.round(completeness),R=40,circ=2*Math.PI*R,offset=circ-(c/100)*circ;
+  const col=c>=80?'var(--accent2)':c>=50?'var(--accent3)':'var(--rose)';
+  document.getElementById('op-score').innerHTML=`
     <div class="score-ring-wrap">
       <div class="score-ring">
-        <svg width="100" height="100" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--s3)" stroke-width="8"/>
-          <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" style="transition:stroke-dashoffset .6s ease"/>
-        </svg>
-        <div class="score-ring-num"><div class="score-ring-n" style="color:${color}">${c}</div><div class="score-ring-l">/ 100</div></div>
+        <svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--s3)" stroke-width="8"/><circle cx="50" cy="50" r="${R}" fill="none" stroke="${col}" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" style="transition:stroke-dashoffset .5s"/></svg>
+        <div class="score-ring-num"><div class="score-ring-n" style="color:${col}">${c}</div><div class="score-ring-l">/100</div></div>
       </div>
     </div>
     <div class="score-breakdown">
-      ${breakdown.map(b=>`
-        <div class="sb-row">
-          <div class="sb-label">${b.label}</div>
-          <div class="sb-bar"><div class="sb-fill" style="width:${(b.val/b.max)*100}%;background:${b.color}"></div></div>
-          <div class="sb-val">${b.val}/${b.max}</div>
-        </div>`).join('')}
+      ${[['Correctness',Math.round(c*.5),50,'var(--accent)'],['Test coverage',Math.round(c*.3),30,'var(--accent2)'],['Code quality',Math.round(c*.2),20,'var(--accent3)']].map(([l,v,m,col])=>`
+        <div class="sb-row"><div class="sb-label">${l}</div><div class="sb-bar"><div class="sb-fill" style="width:${(v/m)*100}%;background:${col}"></div></div><div class="sb-val">${v}/${m}</div></div>`).join('')}
     </div>`;
 }
 
-function renderHints(taskIdx) {
-  const el = document.getElementById('op-hints');
-  const hints = [
-    `<strong>Hint 1 (Free):</strong> Start by understanding the exact return format expected. Look at the test names carefully.`,
-    `<strong>Hint 2 (-5 XP):</strong> Check the solution structure — how many endpoints/functions are needed?`,
-    `<strong>Hint 3 (-10 XP):</strong> Copy the pattern from the solution and fill in the logic.`,
-  ];
-  el.innerHTML = hints.map((h,i) => `
-    <div class="hint-item" onclick="useHint(${i})">
-      ${h}
-    </div>`).join('') + `<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">Click a hint to reveal · Hints 2+ cost XP</div>`;
+function renderHints(){
+  document.getElementById('op-hints').innerHTML=[
+    `<strong>Free Hint:</strong> Read the task requirements carefully — the expected return format is in the description.`,
+    `<strong>Hint 2 (-5 XP):</strong> Look at the test names — they describe exactly what each assertion checks.`,
+    `<strong>Hint 3 (-10 XP):</strong> Structure your solution line by line matching each requirement.`
+  ].map((h,i)=>`<div class="hint-item" onclick="useHint(${i})">${h}</div>`).join('')+`<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">Hints 2+ cost XP · Click to reveal</div>`;
 }
 
-function useHint(i) {
-  if(i===0) { showToast('💡 Hint revealed!'); return; }
-  const cost = i===1?5:10;
-  if(user.xp < cost) { showToast(`Need ${cost} XP to unlock this hint`); return; }
-  user.xp -= cost;
-  updateXP();
-  showToast(`💡 Hint used (-${cost} XP)`);
+function useHint(i){
+  if(i===0){showToast('💡 Free hint revealed!');return;}
+  const cost=i===1?5:10;
+  if(user.xp<cost){showToast(`Need ${cost} XP to unlock this hint`);return;}
+  user.xp-=cost;updateXP();showToast(`💡 Hint used (-${cost} XP)`);
 }
 
-function submitTask() {
+function submitTask(){
   clearInterval(timerInterval);
-  const task = currentSim.tasks_data[currentTaskIndex];
-  const code = document.getElementById('code-editor').value;
-  const sol = task.solution;
-  const solKws = sol.split('\n').filter(l=>l.trim().length>5).map(l=>l.trim().slice(0,20));
-  let matches = 0;
-  solKws.forEach(kw=>{if(code.includes(kw.slice(0,15))) matches++;});
-  let score = Math.min(100, Math.round((matches/Math.max(solKws.length,1))*100));
-  // Bonus for code length
-  if(code.length > 200 && !code.includes('TODO')) score = Math.min(100, score + 15);
-  score = Math.max(score, code.length > 150 ? 45 : 20);
-
-  taskResults[currentTaskIndex] = { score };
-  const xpEarned = Math.round((score/100) * (currentSim.xp / currentSim.tasks_data.length));
-  user.xp += xpEarned;
-
-  // Update sim progress
-  const doneCount = Object.keys(taskResults).length;
-  currentSim.progress = Math.round((doneCount / currentSim.tasks_data.length)*100);
-
-  const isLastTask = currentTaskIndex === currentSim.tasks_data.length - 1;
-
-  document.getElementById('modal-score').textContent = score;
-  document.getElementById('modal-cert').style.display = 'none';
-
-  if(isLastTask) {
-    currentSim.status = 'done';
-    const avgScore = Math.round(Object.values(taskResults).reduce((a,b)=>a+b.score,0)/Object.keys(taskResults).length);
-    const cert = {
-      id: `CERT-${currentSim.id.toUpperCase()}-2025-${String(user.certs.length+1).padStart(4,'0')}`,
-      title: currentSim.title,
-      icon: currentSim.icon,
-      color: currentSim.color,
-      score: avgScore,
-      date: new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})
-    };
+  const task=currentSim.tasks_data[currentTaskIndex];
+  const code=document.getElementById('code-editor').value;
+  const kwds=task.solution.split(/[;\n]/).filter(l=>l.trim().length>4).map(l=>l.trim().slice(0,18));
+  let hits=kwds.filter(k=>code.includes(k.slice(0,14))).length;
+  let score=Math.min(100,Math.round((hits/Math.max(kwds.length,1))*100));
+  if(code.length>200&&!code.includes('TODO'))score=Math.min(100,score+15);
+  score=Math.max(score,code.length>150?45:20);
+  taskResults[currentTaskIndex]={score};
+  const xpEarned=Math.round((score/100)*(currentSim.xp/currentSim.tasks_data.length));
+  user.xp+=xpEarned;
+  currentSim.progress=Math.round((Object.keys(taskResults).length/currentSim.tasks_data.length)*100);
+  const isLast=currentTaskIndex===currentSim.tasks_data.length-1;
+  if(isLast){
+    currentSim.status='done';
+    const avg=Math.round(Object.values(taskResults).reduce((a,b)=>a+b.score,0)/Object.keys(taskResults).length);
+    const cert={id:`CERT-${currentSim.id.toUpperCase()}-2025-${String(user.certs.length+1).padStart(4,'0')}`,title:currentSim.title,icon:currentSim.icon,color:currentSim.color,score:avg,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})};
     user.certs.push(cert);
-
-    document.getElementById('sc-cert-id').textContent = cert.id;
-    document.getElementById('sc-cert-name').textContent = user.name;
-    document.getElementById('sc-cert-role').textContent = `has completed the ${currentSim.title} Simulation`;
-    document.getElementById('sc-score').textContent = avgScore;
-    document.getElementById('sc-date').textContent = cert.date;
+    document.getElementById('sc-cert-id').textContent=cert.id;
+    document.getElementById('sc-cert-name').textContent=`${user.fname} ${user.lname}`.trim();
+    document.getElementById('sc-cert-role').textContent=`has completed the ${currentSim.title} Simulation`;
+    document.getElementById('sc-score').textContent=avg;
+    document.getElementById('sc-date').textContent=cert.date;
     document.getElementById('modal-sim-complete').classList.add('open');
-
-    if(currentSim.id==='sw') {
-      const ds = SIMULATIONS.find(s=>s.id==='ds');
-      if(ds) ds.status = 'active';
-    }
-    updateXP();
-    renderDashboard();
-    renderSimsGrid();
+    if(currentSim.id==='sw'){const ds=SIMULATIONS.find(s=>s.id==='ds');if(ds)ds.status='active';}
+    updateXP();renderDashboard();renderSimsGrid();
   } else {
-    document.getElementById('modal-next-btn').textContent = `Next Task →`;
+    document.getElementById('modal-score').textContent=score;
     document.getElementById('modal-complete').classList.add('open');
   }
   showToast(`+${xpEarned} XP earned! Score: ${score}/100`);
   updateXP();
 }
 
-function nextTask() {
-  closeModal();
-  if(currentTaskIndex < currentSim.tasks_data.length - 1) {
-    loadTask(currentTaskIndex + 1);
-  }
-}
+function nextTask(){closeModal('modal-complete');if(currentTaskIndex<currentSim.tasks_data.length-1)loadTask(currentTaskIndex+1);}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function downloadCert(){showToast('📄 Certificate downloading... (demo mode)');closeModal('modal-sim-complete');navigate('profile');}
 
-function closeModal() { document.getElementById('modal-complete').classList.remove('open'); }
-function closeSimModal() { document.getElementById('modal-sim-complete').classList.remove('open'); }
-function downloadCert() { showToast('📄 Certificate PDF downloading... (demo)'); closeSimModal(); navigate('profile'); }
-
-function switchOpTab(tab, el) {
+function switchOpTab(tab,el){
   document.querySelectorAll('.optab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  else document.querySelectorAll('.optab')[0].classList.add('active');
-  ['console','tests','score','hints'].forEach(t=>{
-    const el2 = document.getElementById('op-'+t);
-    if(el2) el2.style.display = t===tab?'block':'none';
-  });
+  if(el)el.classList.add('active');
+  ['console','tests','score','hints'].forEach(t=>{const e=document.getElementById('op-'+t);if(e)e.style.display=t===tab?'block':'none';});
 }
 
-// Toast
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.opacity='1';
-  t.style.transform='translateY(0)';
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(80px)'},2800);
+// ═══════════════ HELPERS ═══════════════
+function toggleDropdown(){document.getElementById('tb-dropdown').classList.toggle('open');}
+function closeDropdown(){document.getElementById('tb-dropdown').classList.remove('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.tb-avatar')&&!e.target.closest('.tb-dropdown'))closeDropdown();});
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(80px)';},2800);
 }
 
-// Auto-start with default name
-window.addEventListener('load', () => {
-  const ws = document.getElementById('welcome-screen');
-  ws.style.animation = 'none';
-  updateLineNums();
+document.getElementById('code-editor').addEventListener('keydown',e=>{
+  if(e.key==='Tab'){e.preventDefault();const s=e.target.selectionStart;e.target.value=e.target.value.substring(0,s)+'  '+e.target.value.substring(e.target.selectionEnd);e.target.selectionStart=e.target.selectionEnd=s+2;updateLineNums();}
 });
 
-// Tab key in editor
-document.getElementById('code-editor').addEventListener('keydown', e => {
-  if(e.key==='Tab') {
-    e.preventDefault();
-    const s=e.target.selectionStart;
-    e.target.value=e.target.value.substring(0,s)+'  '+e.target.value.substring(e.target.selectionEnd);
-    e.target.selectionStart=e.target.selectionEnd=s+2;
-    updateLineNums();
-  }
-});
+// Fix template literal syntax
 </script>
 </body>
 </html>
